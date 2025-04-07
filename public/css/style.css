@@ -25,6 +25,17 @@ body {
   top: -1px;
 }
 
+/* Hamburger button fix */
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+
 /* Dashboard Cards */
 .card {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -32,9 +43,9 @@ body {
   transition: transform 0.2s;
 }
 
-.card:hover {
+/* .card:hover {
   transform: translateY(-2px);
-}
+} */
 
 /* Ticket List and Table */
 .table > tbody > tr {
@@ -122,6 +133,26 @@ body {
 .card.bg-success:hover {
   transform: translateY(-5px);
   opacity: 0.9;
+}
+
+/* History List Styling */
+.history-container {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.history-list {
+  padding-left: 0;
+}
+
+.history-item {
+  margin-bottom: 0.5rem;
+  border-left: 3px solid #0d6efd;
+  transition: background-color 0.2s;
+}
+
+.history-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 /* Responsive Adjustments */

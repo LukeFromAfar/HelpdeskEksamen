@@ -16,6 +16,22 @@ const CommentSchema = new mongoose.Schema({
   }
 });
 
+const HistorySchema = new mongoose.Schema({
+  action: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now
+  }
+});
+
 const TicketSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -45,6 +61,7 @@ const TicketSchema = new mongoose.Schema({
     default: 'Medium'
   },
   comments: [CommentSchema],
+  history: [HistorySchema],
   createdAt: {
     type: Date,
     default: Date.now

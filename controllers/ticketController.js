@@ -75,7 +75,12 @@ const ticketController = {
         title,
         description,
         category,
-        user: req.user._id
+        user: req.user._id,
+        history: [{
+          action: 'Henvendelse opprettet',
+          user: req.user._id,
+          timestamp: new Date()
+        }]
       });
       
       await newTicket.save();
@@ -103,7 +108,8 @@ const ticketController = {
     try {
       const ticket = await Ticket.findById(req.params.id)
         .populate('user', 'name email')
-        .populate('comments.user', 'name role');
+        .populate('comments.user', 'name role')
+        .populate('history.user', 'name role');
       
       if (!ticket) {
         return res.status(404).render('error', { 
@@ -165,16 +171,7 @@ const ticketController = {
   updateTicket: async (req, res) => {
     try {
       const { status, priority } = req.body;
-      
-      const ticket = await Ticket.findByIdAndUpdate(
-        req.params.id,
-        { 
-          status, 
-          priority,
-          updatedAt: Date.now()
-        },
-        { new: true }
-      );
+      const ticket = await Ticket.findById(req.params.id);
       
       if (!ticket) {
         return res.status(404).render('error', { 
@@ -182,6 +179,31 @@ const ticketController = {
           error: {} 
         });
       }
+      
+      // Add history entry for status change if status has changed
+      if (ticket.status !== status) {
+        ticket.history.push({
+          action: `Status endret fra ${ticket.status} til ${status}`,
+          user: req.user._id,
+          timestamp: new Date()
+        });
+      }
+      
+      // Add history entry for priority change if priority has changed
+      if (ticket.priority !== priority) {
+        ticket.history.push({
+          action: `Prioritet endret fra ${ticket.priority} til ${priority}`,
+          user: req.user._id,
+          timestamp: new Date()
+        });
+      }
+      
+      // Update ticket fields
+      ticket.status = status;
+      ticket.priority = priority;
+      ticket.updatedAt = Date.now();
+      
+      await ticket.save();
       
       // Notify ticket owner via socket.io
       req.io.to(`user_${ticket.user}`).emit('ticket-updated', {
@@ -221,9 +243,17 @@ const ticketController = {
         });
       }
       
+      // Add comment
       ticket.comments.push({
         text,
         user: req.user._id
+      });
+      
+      // Add history entry for comment
+      ticket.history.push({
+        action: `Kommentar lagt til av ${req.user.role === 'admin' ? 'administrator' : 'bruker'}`,
+        user: req.user._id,
+        timestamp: new Date()
       });
       
       ticket.updatedAt = Date.now();

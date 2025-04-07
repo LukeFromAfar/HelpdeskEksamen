@@ -19,30 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Listen for ticket updates (user-specific)
     socket.on('ticket-updated', (data) => {
-      const ticketRow = document.querySelector(`.ticket-row[data-id="${data.id}"]`);
-      if (ticketRow) {
-        const statusBadge = ticketRow.querySelector('td:nth-child(4) .badge');
-        
-        // Update status badge
-        if (statusBadge) {
-          statusBadge.textContent = data.status;
-          statusBadge.className = `badge bg-${
-            data.status === 'Åpen' ? 'danger' : 
-            data.status === 'Under arbeid' ? 'warning' : 'success'
-          }`;
-        }
-        
-        // Flash the updated row
-        ticketRow.classList.add('bg-highlight');
-        setTimeout(() => {
-          ticketRow.classList.remove('bg-highlight');
-        }, 3000);
-      }
-      
-      // Show notification toast
+      // Show notification toast without auto close
       createToast('Henvendelse oppdatert', 
         `Status på din henvendelse er endret til "${data.status}"`, 
-        data.id);
+        data.id,
+        false,  // Do not auto close
+        true    // Add OK button that refreshes
+      );
+      
+      // Auto-refresh if on related page
+      if (window.location.pathname.includes(`/api/tickets/view/${data.id}`)) {
+        location.reload();
+      }
     });
     
     // Listen for new tickets (admin-specific)
@@ -50,17 +38,24 @@ document.addEventListener('DOMContentLoaded', () => {
       createToast('Ny henvendelse', 
         `En ny henvendelse "${data.title}" fra ${data.user} er opprettet.`, 
         data.id,
-        false); // Do not auto-close new ticket notifications
+        false, // Do not auto close
+        true   // Add refresh button
+      );
       
-      // Reload page after a delay to show the new ticket
-      setTimeout(() => {
+      // Auto-refresh admin dashboard if active
+      if (window.location.pathname === '/api/tickets/admin') {
         location.reload();
-      }, 3000);
+      }
     });
     
     // Listen for new comments (both user and admin)
     socket.on('new-comment', (data) => {
-      createToast('Ny kommentar', data.message, data.ticketId);
+      createToast('Ny kommentar', data.message, data.ticketId, false, true);
+      
+      // Auto-refresh if on the ticket page
+      if (window.location.pathname.includes(`/api/tickets/view/${data.ticketId}`)) {
+        location.reload();
+      }
     });
   }
 });
@@ -71,14 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {string} message - Toast message content
  * @param {string} ticketId - ID of the related ticket (for the link)
  * @param {boolean} autoClose - Whether to auto-close the toast (default: true)
+ * @param {boolean} addOkButton - Whether to add an OK button that refreshes the page
  */
-function createToast(title, message, ticketId, autoClose = true) {
+function createToast(title, message, ticketId, autoClose = true, addOkButton = false) {
   // Create notification elements
   const notification = document.createElement('div');
   notification.className = 'toast show';
   notification.setAttribute('role', 'alert');
   notification.setAttribute('aria-live', 'assertive');
   notification.setAttribute('aria-atomic', 'true');
+  
+  let footerContent = '';
+  
+  if (ticketId) {
+    footerContent += `<a href="/api/tickets/view/${ticketId}" class="btn btn-sm btn-primary">Vis henvendelse</a>`;
+  }
+  
+  if (addOkButton) {
+    footerContent += `<button type="button" class="btn btn-sm btn-success ms-2 ok-button">OK</button>`;
+  }
   
   notification.innerHTML = `
     <div class="toast-header">
@@ -87,11 +93,7 @@ function createToast(title, message, ticketId, autoClose = true) {
     </div>
     <div class="toast-body">
       ${message}
-      ${ticketId ? `
-      <div class="mt-2 pt-2 border-top">
-        <a href="/api/tickets/view/${ticketId}" class="btn btn-sm btn-primary">Vis henvendelse</a>
-      </div>
-      ` : ''}
+      ${footerContent ? `<div class="mt-2 pt-2 border-top">${footerContent}</div>` : ''}
     </div>
   `;
   
@@ -138,6 +140,15 @@ function createToast(title, message, ticketId, autoClose = true) {
           document.body.removeChild(toastContainer);
         }
       }, 300);
+    });
+  }
+  
+  // Add click event to OK button if it exists
+  const okButton = notification.querySelector('.ok-button');
+  if (okButton) {
+    okButton.addEventListener('click', () => {
+      // Refresh the page to show the changes
+      location.reload();
     });
   }
 }
