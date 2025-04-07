@@ -1,0 +1,99 @@
+<%- include('../partials/header', {title: 'Vis henvendelse'}) %>
+<%- include('../partials/navbar') %>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4>Henvendelse: <%= ticket.title %></h4>
+          <span class="badge bg-<%= 
+            ticket.status === 'Åpen' ? 'danger' : 
+            ticket.status === 'Under arbeid' ? 'warning' : 'success' 
+          %>"><%= ticket.status %></span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <strong>Kategori:</strong> <%= ticket.category %>
+          </div>
+          <div class="mb-3">
+            <strong>Prioritet:</strong> 
+            <span class="badge bg-<%= 
+              ticket.priority === 'Høy' ? 'danger' : 
+              ticket.priority === 'Medium' ? 'warning' : 'info' 
+            %>"><%= ticket.priority %></span>
+          </div>
+          <div class="mb-3">
+            <strong>Opprettet av:</strong> <%= ticket.user.name %>
+          </div>
+          <div class="mb-3">
+            <strong>Opprettet:</strong> <%= new Date(ticket.createdAt).toLocaleString('no-NO') %>
+          </div>
+          <div class="mb-3">
+            <strong>Sist oppdatert:</strong> <%= new Date(ticket.updatedAt).toLocaleString('no-NO') %>
+          </div>
+          <div class="mb-3">
+            <strong>Beskrivelse:</strong>
+            <p class="mt-2"><%= ticket.description %></p>
+          </div>
+          
+          <% if (user.role === 'admin') { %>
+            <div class="mt-4">
+              <a href="/api/tickets/edit/<%= ticket._id %>" class="btn btn-warning">Rediger henvendelse</a>
+              <a href="/api/tickets/admin" class="btn btn-secondary">Tilbake til dashbord</a>
+            </div>
+          <% } else { %>
+            <div class="mt-4">
+              <a href="/api/tickets/mydashboard" class="btn btn-secondary">Tilbake til dashbord</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      
+      <!-- Comments section -->
+      <div class="card">
+        <div class="card-header">
+          <h5>Kommentarer</h5>
+        </div>
+        <div class="card-body">
+          <!-- Existing comments -->
+          <% if (ticket.comments && ticket.comments.length > 0) { %>
+            <div class="comments-container mb-4">
+              <% ticket.comments.forEach(comment => { %>
+                <div class="comment p-3 mb-3 border rounded">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <strong><%= comment.user.name %></strong>
+                      <% if (comment.user.role === 'admin') { %>
+                        <span class="badge bg-primary ms-2">Admin</span>
+                      <% } %>
+                    </div>
+                    <small><%= new Date(comment.createdAt).toLocaleString('no-NO') %></small>
+                  </div>
+                  <p class="mt-2 mb-0"><%= comment.text %></p>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p>Ingen kommentarer enda.</p>
+          <% } %>
+          
+          <!-- Add new comment -->
+          <form action="/api/tickets/comment/<%= ticket._id %>" method="POST">
+            <div class="mb-3">
+              <label for="text" class="form-label">Legg til en kommentar</label>
+              <textarea class="form-control" id="text" name="text" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send kommentar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <!-- Ticket status history could be added here in the future -->
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

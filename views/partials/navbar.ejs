@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="<%= typeof user !== 'undefined' ? '/api/tickets/mydashboard' : '/' %>">Helpdesk System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <% if (typeof user !== 'undefined') { %>
+          <% if (user.role === 'admin') { %>
+            <li class="nav-item">
+              <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Admin dashbord') ? 'active' : '' %>" href="/api/tickets/admin">Admin dashbord</a>
+            </li>
+          <% } %>
+          <li class="nav-item">
+            <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Mitt dashbord') ? 'active' : '' %>" href="/api/tickets/mydashboard">Mitt dashbord</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Opprett ny henvendelse') ? 'active' : '' %>" href="/api/tickets/create">Opprett henvendelse</a>
+          </li>
+        <% } %>
+      </ul>
+      <ul class="navbar-nav">
+        <% if (typeof user !== 'undefined') { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= user.name %> <% if (user.role === 'admin') { %><span class="badge bg-primary">Admin</span><% } %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <form action="/api/auth/logout" method="POST">
+                  <button type="submit" class="dropdown-item">Logg ut</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Logg inn') ? 'active' : '' %>" href="/api/auth/login">Logg inn</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Registrer deg') ? 'active' : '' %>" href="/api/auth/register">Registrer deg</a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,47 @@
+<%- include('../partials/header', {title: 'Opprett ny henvendelse'}) %>
+<%- include('../partials/navbar') %>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h4>Opprett ny henvendelse</h4>
+        </div>
+        <div class="card-body">
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger" role="alert">
+              <%= error %>
+            </div>
+          <% } %>
+          <form action="/api/tickets/create" method="POST">
+            <div class="mb-3">
+              <label for="title" class="form-label">Tittel</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+              <label for="category" class="form-label">Kategori</label>
+              <select class="form-select" id="category" name="category" required>
+                <option value="">Velg kategori</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Software">Software</option>
+                <option value="Nettverk">Nettverk</option>
+                <option value="Konto">Konto/Tilgang</option>
+                <option value="Annet">Annet</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Beskrivelse</label>
+              <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+              <small class="form-text text-muted">Beskriv problemet så detaljert som mulig.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Send inn henvendelse</button>
+            <a href="/api/tickets/mydashboard" class="btn btn-secondary">Avbryt</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

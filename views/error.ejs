@@ -1,0 +1,16 @@
+<%- include('partials/header', {title: 'Feil'}) %>
+<%- include('partials/navbar') %>
+
+<div class="container mt-5">
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Feil!</h4>
+    <p><%= message %></p>
+    <% if (process.env.NODE_ENV === 'development' && error && error.stack) { %>
+      <hr>
+      <pre><%= error.stack %></pre>
+    <% } %>
+  </div>
+  <a href="/" class="btn btn-primary">Gå til forsiden</a>
+</div>
+
+<%- include('partials/footer') %>

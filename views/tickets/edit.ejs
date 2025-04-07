@@ -1,0 +1,55 @@
+<%- include('../partials/header', {title: 'Rediger henvendelse'}) %>
+<%- include('../partials/navbar') %>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h4>Rediger henvendelse</h4>
+        </div>
+        <div class="card-body">
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger" role="alert">
+              <%= error %>
+            </div>
+          <% } %>
+          <form action="/api/tickets/update/<%= ticket._id %>" method="POST">
+            <div class="mb-3">
+              <label class="form-label">Tittel</label>
+              <input type="text" class="form-control" value="<%= ticket.title %>" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Kategori</label>
+              <input type="text" class="form-control" value="<%= ticket.category %>" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Beskrivelse</label>
+              <textarea class="form-control" rows="3" readonly><%= ticket.description %></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="status" class="form-label">Status</label>
+              <select class="form-select" id="status" name="status" required>
+                <option value="Åpen" <%= ticket.status === 'Åpen' ? 'selected' : '' %>>Åpen</option>
+                <option value="Under arbeid" <%= ticket.status === 'Under arbeid' ? 'selected' : '' %>>Under arbeid</option>
+                <option value="Løst" <%= ticket.status === 'Løst' ? 'selected' : '' %>>Løst</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="priority" class="form-label">Prioritet</label>
+              <select class="form-select" id="priority" name="priority" required>
+                <option value="Lav" <%= ticket.priority === 'Lav' ? 'selected' : '' %>>Lav</option>
+                <option value="Medium" <%= ticket.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
+                <option value="Høy" <%= ticket.priority === 'Høy' ? 'selected' : '' %>>Høy</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Oppdater henvendelse</button>
+            <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-secondary">Avbryt</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

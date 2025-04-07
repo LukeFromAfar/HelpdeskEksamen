@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="container">
+  <div class="jumbotron mt-5">
+    <h1 class="display-4">Helpdesk Ticketing System</h1>
+    <p class="lead">En enkel måte å sende og administrere tekniske spørsmål og problemer.</p>
+    <hr class="my-4">
+    <p>Logg inn for å opprette nye henvendelser eller sjekke status på dine eksisterende henvendelser.</p>
+    <div class="buttons">
+      <a class="btn btn-primary btn-lg" href="/api/auth/login" role="button">Logg inn</a>
+      <a class="btn btn-secondary btn-lg" href="/api/auth/register" role="button">Registrer deg</a>
+    </div>
+  </div>
+  
+  <div class="row mt-5">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Enkelt å bruke</h5>
+          <p class="card-text">Vårt helpdesk system er designet for å være brukervennlig og intuitivt.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Rask respons</h5>
+          <p class="card-text">Få svar og oppdateringer på dine henvendelser i sanntid.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Alltid tilgjengelig</h5>
+          <p class="card-text">Tilgang til systemet når som helst, hvor som helst.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

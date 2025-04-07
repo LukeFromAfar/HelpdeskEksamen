@@ -1,0 +1,139 @@
+<%- include('../partials/header', {title: 'Admin dashbord'}) %>
+<%- include('../partials/navbar') %>
+
+<div class="container-fluid mt-4">
+  <h1 class="mb-4">Admin dashbord</h1>
+  
+  <!-- Stats cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Totalt</h5>
+          <h2 class="card-text"><%= stats.total %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-danger">
+        <div class="card-body">
+          <h5 class="card-title">Åpne</h5>
+          <h2 class="card-text"><%= stats.openCount %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body">
+          <h5 class="card-title">Under arbeid</h5>
+          <h2 class="card-text"><%= stats.inProgressCount %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">Løst</h5>
+          <h2 class="card-text"><%= stats.solvedCount %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Priority stats -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Høy prioritet</h5>
+          <h2 class="card-text text-danger"><%= stats.highPriorityCount %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Medium prioritet</h5>
+          <h2 class="card-text text-warning"><%= stats.mediumPriorityCount %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Lav prioritet</h5>
+          <h2 class="card-text text-info"><%= stats.lowPriorityCount %></h2>
+          <p>henvendelser</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Ticket table -->
+  <div class="card">
+    <div class="card-header">
+      <h5>Alle henvendelser</h5>
+    </div>
+    <div class="card-body">
+      <% if (tickets.length === 0) { %>
+        <div class="alert alert-info" role="alert">
+          Det er ingen henvendelser i systemet.
+        </div>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tittel</th>
+                <th>Bruker</th>
+                <th>Kategori</th>
+                <th>Status</th>
+                <th>Prioritet</th>
+                <th>Opprettet</th>
+                <th>Sist oppdatert</th>
+                <th>Handlinger</th>
+              </tr>
+            </thead>
+            <tbody id="adminTicketList">
+              <% tickets.forEach(ticket => { %>
+                <tr class="ticket-row" data-id="<%= ticket._id %>">
+                  <td><%= ticket._id.toString().substring(0, 6) %>...</td>
+                  <td><%= ticket.title %></td>
+                  <td><%= ticket.user ? ticket.user.name : 'Ukjent' %></td>
+                  <td><%= ticket.category %></td>
+                  <td>
+                    <span class="badge bg-<%= 
+                      ticket.status === 'Åpen' ? 'danger' : 
+                      ticket.status === 'Under arbeid' ? 'warning' : 'success' 
+                    %>"><%= ticket.status %></span>
+                  </td>
+                  <td>
+                    <span class="badge bg-<%= 
+                      ticket.priority === 'Høy' ? 'danger' : 
+                      ticket.priority === 'Medium' ? 'warning' : 'info' 
+                    %>"><%= ticket.priority %></span>
+                  </td>
+                  <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
+                  <td><%= new Date(ticket.updatedAt).toLocaleString('no-NO') %></td>
+                  <td>
+                    <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
+                    <a href="/api/tickets/edit/<%= ticket._id %>" class="btn btn-sm btn-warning">Rediger</a>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

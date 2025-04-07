@@ -1,0 +1,44 @@
+<%- include('../partials/header', {title: 'Registrer deg'}) %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4>Registrer deg</h4>
+        </div>
+        <div class="card-body">
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger" role="alert">
+              <%= error %>
+            </div>
+          <% } %>
+          <form action="/api/auth/register" method="POST">
+            <div class="mb-3">
+              <label for="name" class="form-label">Fullt navn</label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-post</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Passord</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+              <small class="form-text text-muted">Passordet må være minst 8 tegn langt.</small>
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Bekreft passord</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrer deg</button>
+          </form>
+          <p class="mt-3 text-center">Har du allerede en konto? <a href="/api/auth/login">Logg inn</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

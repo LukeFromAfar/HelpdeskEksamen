@@ -1,0 +1,137 @@
+/* Global Styles */
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.container {
+  flex: 1;
+}
+
+/* Navbar Styles */
+.navbar-brand {
+  font-weight: bold;
+}
+
+.navbar .badge {
+  font-size: 0.6em;
+  position: relative;
+  top: -1px;
+}
+
+/* Dashboard Cards */
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Ticket List and Table */
+.table > tbody > tr {
+  cursor: pointer;
+}
+
+.ticket-row:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Ticket Status Colors and Badges */
+.bg-highlight {
+  animation: highlight 2s;
+}
+
+@keyframes highlight {
+  0% { background-color: rgba(255, 251, 204, 1); }
+  100% { background-color: transparent; }
+}
+
+/* Comments Section */
+.comments-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.comment {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s;
+}
+
+.comment:hover {
+  background-color: #f0f0f0;
+}
+
+/* Toast Notifications */
+.toast-container {
+  z-index: 1100;
+}
+
+.toast {
+  width: 350px;
+  max-width: 100%;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+}
+
+/* Homepage Styling */
+.jumbotron {
+  background-color: #f8f9fa;
+  padding: 4rem 2rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.buttons {
+  margin-top: 1.5rem;
+}
+
+.buttons .btn:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+/* Login and Registration Forms */
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+/* Admin Dashboard Stats Cards */
+.card.bg-primary, 
+.card.bg-danger, 
+.card.bg-warning, 
+.card.bg-success {
+  color: white;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.card.bg-primary:hover, 
+.card.bg-danger:hover, 
+.card.bg-warning:hover, 
+.card.bg-success:hover {
+  transform: translateY(-5px);
+  opacity: 0.9;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .jumbotron {
+    padding: 2rem 1rem;
+  }
+}
