@@ -35,7 +35,7 @@
         <tbody id="userTicketList">
           <% tickets.forEach(ticket => { %>
             <tr class="ticket-row" data-id="<%= ticket._id %>">
-              <td><%= ticket._id.toString().substring(0, 6) %>...</td>
+              <td><%= ticket._id %></td>
               <td><%= ticket.title %></td>
               <td><%= ticket.category %></td>
               <td>

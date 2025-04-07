@@ -8,6 +8,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background-color: #f8f9fa;
+  padding-top: 70px; /* Increased padding to account for fixed navbar height */
 }
 
 .container {
@@ -23,6 +24,14 @@ body {
   font-size: 0.6em;
   position: relative;
   top: -1px;
+}
+
+.navbar.sticky-top {
+  box-shadow: 0 2px 4px rgba(0,0,0,.1); /* Add shadow to the sticky navbar for better visual separation */
+}
+
+.navbar.fixed-top {
+  box-shadow: 0 2px 4px rgba(0,0,0,.1); /* Add shadow to the fixed navbar for better visual separation */
 }
 
 /* Hamburger button fix */
@@ -155,6 +164,19 @@ body {
   background-color: rgba(0, 0, 0, 0.03);
 }
 
+/* Admin Filter Section */
+.filter-badge {
+  font-size: 0.75rem;
+  margin-left: 5px;
+}
+
+/* Improved focus states for filter inputs */
+.filter-section .form-control:focus,
+.filter-section .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .container {
@@ -164,5 +186,106 @@ body {
   
   .jumbotron {
     padding: 2rem 1rem;
+  }
+  
+  /* Smaller stat cards for mobile */
+  .card.bg-primary, 
+  .card.bg-danger, 
+  .card.bg-warning, 
+  .card.bg-success {
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Adjust text sizes in stat cards */
+  .card.bg-primary h5.card-title, 
+  .card.bg-danger h5.card-title, 
+  .card.bg-warning h5.card-title, 
+  .card.bg-success h5.card-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .card.bg-primary h2.card-text,
+  .card.bg-danger h2.card-text,
+  .card.bg-warning h2.card-text,
+  .card.bg-success h2.card-text {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .card.bg-primary p,
+  .card.bg-danger p,
+  .card.bg-warning p,
+  .card.bg-success p {
+    font-size: 0.8rem;
+    margin-bottom: 0;
+  }
+  
+  /* Adjust regular cards too */
+  .card .card-body {
+    padding: 0.75rem;
+  }
+  
+  .card h5.card-title {
+    font-size: 1rem;
+  }
+  
+  .card h2.card-text {
+    font-size: 1.25rem;
+  }
+  
+  /* Mobile optimizations for filter section */
+  .filter-section .col-md-4,
+  .filter-section .col-md-8 {
+    margin-bottom: 10px;
+  }
+  
+  /* Stack filters vertically on small screens */
+  .filter-section .form-select,
+  .filter-section .input-group {
+    margin-bottom: 8px;
+  }
+  
+  /* Make the filter card more compact on mobile */
+  .filter-section .card-body {
+    padding: 0.75rem;
+  }
+  
+  /* Make the filter selects stack cleanly */
+  .row.g-2 > [class*="col-"] {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .row > [class*="col-"] {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  /* Even smaller stat cards */
+  .card.bg-primary, 
+  .card.bg-danger, 
+  .card.bg-warning, 
+  .card.bg-success,
+  .card {
+    margin-bottom: 0.5rem;
+  }
+  
+  .card.bg-primary h2.card-text,
+  .card.bg-danger h2.card-text,
+  .card.bg-warning h2.card-text,
+  .card.bg-success h2.card-text {
+    font-size: 1.25rem;
+  }
+  
+  /* Even more compact filtering on very small screens */
+  .filter-section .card-body {
+    padding: 0.5rem;
   }
 }

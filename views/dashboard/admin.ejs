@@ -75,10 +75,61 @@
     </div>
   </div>
   
+  <!-- Ticket filter -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Filtrer henvendelser</h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="input-group">
+            <input type="text" id="ticketSearch" class="form-control" placeholder="Søk på tittel, brukernavn eller ID...">
+            <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+              <i class="bi bi-x"></i> Tøm
+            </button>
+          </div>
+          <small class="form-text text-muted">Søk på tittel, brukernavn eller ID</small>
+        </div>
+        <div class="col-md-8">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <select class="form-select" id="statusFilter">
+                <option value="">Alle statuser</option>
+                <option value="Åpen">Åpen</option>
+                <option value="Under arbeid">Under arbeid</option>
+                <option value="Løst">Løst</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select class="form-select" id="categoryFilter">
+                <option value="">Alle kategorier</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Software">Software</option>
+                <option value="Nettverk">Nettverk</option>
+                <option value="Konto">Konto/Tilgang</option>
+                <option value="Annet">Annet</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select class="form-select" id="priorityFilter">
+                <option value="">Alle prioriteter</option>
+                <option value="Høy">Høy</option>
+                <option value="Medium">Medium</option>
+                <option value="Lav">Lav</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Ticket table -->
   <div class="card">
-    <div class="card-header">
-      <h5>Alle henvendelser</h5>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Alle henvendelser</h5>
+      <span id="ticketCount" class="badge bg-secondary"></span>
     </div>
     <div class="card-body">
       <% if (tickets.length === 0) { %>
@@ -104,7 +155,7 @@
             <tbody id="adminTicketList">
               <% tickets.forEach(ticket => { %>
                 <tr class="ticket-row" data-id="<%= ticket._id %>">
-                  <td><%= ticket._id.toString().substring(0, 6) %>...</td>
+                  <td><%= ticket._id %></td>
                   <td><%= ticket.title %></td>
                   <td><%= ticket.user ? ticket.user.name : 'Ukjent' %></td>
                   <td><%= ticket.category %></td>
