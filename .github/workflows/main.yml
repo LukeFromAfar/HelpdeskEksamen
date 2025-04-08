@@ -21,10 +21,19 @@ jobs:
         git pull origin main
         echo "Pull latest changes completed successfully at $(date)"
         
+    - name: Set up NVM and Node
+      run: |
+        export NVM_DIR="/home/lukasz/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        echo "Node version: $(node -v)"
+        echo "PM2 path: $(which pm2)"
+        
     - name: Reload PM2
       run: |
         cd /var/www/HelpdeskEksamen
-        /home/lukasz/.nvm/versions/node/v22.14.0/bin/pm2 restart HelpdeskEksamen
+        export NVM_DIR="/home/lukasz/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        pm2 reload HelpdeskEksamen || pm2 restart HelpdeskEksamen
         echo "Reload of PM2 completed successfully at $(date)"
         
     - name: Verify deployment
