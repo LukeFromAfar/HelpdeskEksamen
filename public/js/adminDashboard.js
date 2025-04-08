@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const status = statusBadge ? statusBadge.textContent.trim() : '';
       const priorityBadge = row.querySelector('td:nth-child(6) .badge');
       const priority = priorityBadge ? priorityBadge.textContent.trim() : '';
-      const isClosed = row.getAttribute('data-closed') === 'true';
+      const isClosed = status === 'Lukket';
       
       // Check if the row satisfies all filter conditions
       const matchesSearch = searchTerm === '' || 
@@ -65,12 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
                            id.toLowerCase().includes(searchTerm);
       
       // Special handling for status filter
-      let matchesStatus = true;
+      let matchesStatus;
       if (statusValue === '') {
-        // If no status filter selected, show only non-closed tickets
+        // If "Alle aktive statuser" is selected, only show non-closed tickets
         matchesStatus = !isClosed;
       } else if (statusValue === 'all') {
-        // If "all" is selected, show all tickets including closed ones
+        // If "Vis alle (inkl lukket)" is selected, show all tickets
         matchesStatus = true;
       } else {
         // Otherwise, match the specific status

@@ -7,14 +7,18 @@ const ticketController = {
     try {
       // Only show non-closed tickets by default for users
       const tickets = await Ticket.find({ 
-        user: req.user._id,
-        status: { $ne: 'Lukket' } 
+        user: req.user._id
       }).sort({ createdAt: -1 });
+      
+      // Separate active and closed tickets
+      const activeTickets = tickets.filter(ticket => ticket.status !== 'Lukket');
+      const closedTickets = tickets.filter(ticket => ticket.status === 'Lukket');
       
       res.render('dashboard/user', { 
         title: 'Mitt dashbord', 
         user: req.user, 
-        tickets 
+        activeTickets,
+        closedTickets
       });
     } catch (error) {
       console.error('Error fetching user dashboard:', error);

@@ -10,13 +10,13 @@
   <div class="card mb-4">
     <div class="card-body">
       <h5 class="card-title">Velkommen, <%= user.name %></h5>
-      <p class="card-text">Her kan du se alle dine aktive henvendelser og deres status.</p>
+      <p class="card-text">Her kan du se alle dine henvendelser og deres status.</p>
     </div>
   </div>
   
-  <% if (tickets.length === 0) { %>
+  <% if (activeTickets.length === 0 && closedTickets.length === 0) { %>
     <div class="alert alert-info" role="alert">
-      Du har ingen aktive henvendelser enda. Opprett din første henvendelse nå!
+      Du har ingen henvendelser enda. Opprett din første henvendelse nå!
     </div>
   <% } else { %>
     <div class="table-responsive">
@@ -33,30 +33,62 @@
           </tr>
         </thead>
         <tbody id="userTicketList">
-          <% tickets.forEach(ticket => { %>
-            <tr class="ticket-row" data-id="<%= ticket._id %>">
-              <td><%= ticket._id %></td>
-              <td class="ticket-title" title="<%= ticket.title %>"><%= ticket.title %></td>
-              <td><%= ticket.category %></td>
-              <td>
-                <span class="badge bg-<%= 
-                  ticket.status === 'Åpen' ? 'danger' : 
-                  ticket.status === 'Under arbeid' ? 'warning' : 
-                  ticket.status === 'Løst' ? 'success' : 'secondary' 
-                %>"><%= ticket.status %></span>
-              </td>
-              <td>
-                <span class="badge bg-<%= 
-                  ticket.priority === 'Høy' ? 'danger' : 
-                  ticket.priority === 'Medium' ? 'warning' : 'info' 
-                %>"><%= ticket.priority %></span>
-              </td>
-              <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
-              <td>
-                <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
+          <% if (activeTickets.length > 0) { %>
+            <% activeTickets.forEach(ticket => { %>
+              <tr class="ticket-row" data-id="<%= ticket._id %>">
+                <td><%= ticket._id %></td>
+                <td class="ticket-title" title="<%= ticket.title %>"><%= ticket.title %></td>
+                <td><%= ticket.category %></td>
+                <td>
+                  <span class="badge bg-<%= 
+                    ticket.status === 'Åpen' ? 'danger' : 
+                    ticket.status === 'Under arbeid' ? 'warning' : 
+                    ticket.status === 'Løst' ? 'success' : 'secondary' 
+                  %>"><%= ticket.status %></span>
+                </td>
+                <td>
+                  <span class="badge bg-<%= 
+                    ticket.priority === 'Høy' ? 'danger' : 
+                    ticket.priority === 'Medium' ? 'warning' : 'info' 
+                  %>"><%= ticket.priority %></span>
+                </td>
+                <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
+                <td>
+                  <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } %>
+          
+          <% if (closedTickets.length > 0) { %>
+            <!-- Divider row -->
+            <tr class="ticket-divider">
+              <td colspan="7" class="text-center bg-light">
+                <strong>Lukkede henvendelser</strong>
               </td>
             </tr>
-          <% }) %>
+            
+            <% closedTickets.forEach(ticket => { %>
+              <tr class="ticket-row closed-ticket" data-id="<%= ticket._id %>">
+                <td><%= ticket._id %></td>
+                <td class="ticket-title" title="<%= ticket.title %>"><%= ticket.title %></td>
+                <td><%= ticket.category %></td>
+                <td>
+                  <span class="badge bg-secondary"><%= ticket.status %></span>
+                </td>
+                <td>
+                  <span class="badge bg-<%= 
+                    ticket.priority === 'Høy' ? 'danger' : 
+                    ticket.priority === 'Medium' ? 'warning' : 'info' 
+                  %>"><%= ticket.priority %></span>
+                </td>
+                <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
+                <td>
+                  <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } %>
         </tbody>
       </table>
     </div>

@@ -92,6 +92,21 @@ body {
   background-color: rgba(0, 0, 0, 0.03);
 }
 
+/* Divider row styling */
+.ticket-divider {
+  border-top: 2px solid #dee2e6;
+}
+
+.ticket-divider td {
+  padding: 12px;
+  font-size: 1.1rem;
+}
+
+/* Closed tickets styling - slightly dimmed */
+.closed-ticket td {
+  opacity: 0.8;
+}
+
 /* Truncate long ticket titles in tables */
 .table td.ticket-title {
   max-width: 200px; /* Adjust as needed */
