@@ -24,7 +24,7 @@ jobs:
     - name: Reload PM2
       run: |
         cd /var/www/HelpdeskEksamen
-        pm2 restart HelpdeskEksamen
+        /home/lukasz/.nvm/versions/node/v22.14.0/bin/pm2 restart HelpdeskEksamen
         echo "Reload of PM2 completed successfully at $(date)"
         
     - name: Verify deployment
