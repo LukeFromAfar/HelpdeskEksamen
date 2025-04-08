@@ -15,11 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Install PM2
-      run: |
-        sudo npm install -g pm2
-        echo "PM2 installed successfully at $(date)"
-      
     - name: Pull latest changes
       run: |
         cd /var/www/HelpdeskEksamen
@@ -28,7 +23,7 @@ jobs:
         
     - name: Reload PM2
       run: |
-        sudo pm2 reload HelpdeskEksamen
+        pm2 reload HelpdeskEksamen
         echo "Reload of PM2 completed successfully at $(date)"
         
     - name: Verify deployment
