@@ -4,72 +4,49 @@
 <div class="container-fluid mt-4">
   <h1 class="mb-4">Admin dashbord</h1>
   
-  <!-- Stats cards -->
-  <div class="row mb-4">
-    <div class="col-md-3">
-      <div class="card text-white bg-primary">
-        <div class="card-body">
-          <h5 class="card-title">Totalt</h5>
-          <h2 class="card-text"><%= stats.total %></h2>
-          <p>henvendelser</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-white bg-danger">
-        <div class="card-body">
-          <h5 class="card-title">Åpne</h5>
-          <h2 class="card-text"><%= stats.openCount %></h2>
-          <p>henvendelser</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-white bg-warning">
-        <div class="card-body">
-          <h5 class="card-title">Under arbeid</h5>
-          <h2 class="card-text"><%= stats.inProgressCount %></h2>
-          <p>henvendelser</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-white bg-success">
-        <div class="card-body">
-          <h5 class="card-title">Løst</h5>
-          <h2 class="card-text"><%= stats.solvedCount %></h2>
-          <p>henvendelser</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Hidden data div for charts -->
+  <div id="chartStatsData" class="d-none"><%= JSON.stringify(stats) %></div>
   
-  <!-- Priority stats -->
+  <!-- Stats charts -->
   <div class="row mb-4">
-    <div class="col-md-4">
+    <div class="col-md-6 mb-3">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Høy prioritet</h5>
-          <h2 class="card-text text-danger"><%= stats.highPriorityCount %></h2>
-          <p>henvendelser</p>
+          <div class="d-flex justify-content-between mb-2">
+            <h5 class="card-title">Status fordeling</h5>
+            <div>
+              <span class="badge bg-danger me-1">Åpne: <%= stats.openCount %></span>
+              <span class="badge bg-warning me-1">Under arbeid: <%= stats.inProgressCount %></span>
+              <span class="badge bg-success">Løst: <%= stats.solvedCount %></span>
+            </div>
+          </div>
+          <div class="chart-container" style="position: relative; height: 250px;">
+            <canvas id="statusChart"></canvas>
+          </div>
+          <div class="text-center mt-2">
+            <strong>Totalt: <%= stats.total %> henvendelser</strong>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    
+    <div class="col-md-6 mb-3">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Medium prioritet</h5>
-          <h2 class="card-text text-warning"><%= stats.mediumPriorityCount %></h2>
-          <p>henvendelser</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Lav prioritet</h5>
-          <h2 class="card-text text-info"><%= stats.lowPriorityCount %></h2>
-          <p>henvendelser</p>
+          <div class="d-flex justify-content-between mb-2">
+            <h5 class="card-title">Prioritet fordeling</h5>
+            <div>
+              <span class="badge bg-danger me-1">Høy: <%= stats.highPriorityCount %></span>
+              <span class="badge bg-warning me-1">Medium: <%= stats.mediumPriorityCount %></span>
+              <span class="badge bg-info">Lav: <%= stats.lowPriorityCount %></span>
+            </div>
+          </div>
+          <div class="chart-container" style="position: relative; height: 250px;">
+            <canvas id="priorityChart"></canvas>
+          </div>
+          <div class="text-center mt-2">
+            <strong>Totalt: <%= stats.total %> henvendelser</strong>
+          </div>
         </div>
       </div>
     </div>
