@@ -157,7 +157,6 @@
                   <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
                   <td><%= new Date(ticket.updatedAt).toLocaleString('no-NO') %></td>
                   <td>
-                    <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
                     <a href="/api/tickets/edit/<%= ticket._id %>" class="btn btn-sm btn-warning">Rediger</a>
                   </td>
                 </tr>

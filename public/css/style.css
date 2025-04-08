@@ -88,8 +88,12 @@ body {
   cursor: pointer;
 }
 
+.ticket-row {
+  transition: background-color 0.15s ease-in-out;
+}
+
 .ticket-row:hover {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 123, 255, 0.1) !important;
 }
 
 /* Divider row styling */

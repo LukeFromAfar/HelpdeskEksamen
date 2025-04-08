@@ -29,7 +29,6 @@
             <th>Status</th>
             <th>Prioritet</th>
             <th>Opprettet</th>
-            <th>Handlinger</th>
           </tr>
         </thead>
         <tbody id="userTicketList">
@@ -53,9 +52,6 @@
                   %>"><%= ticket.priority %></span>
                 </td>
                 <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
-                <td>
-                  <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
-                </td>
               </tr>
             <% }) %>
           <% } %>
@@ -63,7 +59,7 @@
           <% if (closedTickets.length > 0) { %>
             <!-- Divider row -->
             <tr class="ticket-divider">
-              <td colspan="7" class="text-center bg-light">
+              <td colspan="6" class="text-center bg-light">
                 <strong>Lukkede henvendelser</strong>
               </td>
             </tr>
@@ -83,9 +79,6 @@
                   %>"><%= ticket.priority %></span>
                 </td>
                 <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
-                <td>
-                  <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-sm btn-info">Vis</a>
-                </td>
               </tr>
             <% }) %>
           <% } %>
