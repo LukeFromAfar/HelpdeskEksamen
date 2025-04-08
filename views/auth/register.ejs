@@ -14,7 +14,7 @@
               <%= error %>
             </div>
           <% } %>
-          <form action="/api/auth/register" method="POST">
+          <form action="/api/auth/register" method="POST" id="registerForm">
             <div class="mb-3">
               <label for="name" class="form-label">Fullt navn</label>
               <input type="text" class="form-control" id="name" name="name" required>
@@ -25,12 +25,12 @@
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Passord</label>
-              <input type="password" class="form-control" id="password" name="password" required>
+              <input type="password" class="form-control" id="password" name="password" minlength="8" required>
               <small class="form-text text-muted">Passordet må være minst 8 tegn langt.</small>
             </div>
             <div class="mb-3">
               <label for="confirmPassword" class="form-label">Bekreft passord</label>
-              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="8" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Registrer deg</button>
           </form>
@@ -40,5 +40,29 @@
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('registerForm');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  
+  form.addEventListener('submit', (e) => {
+    if (password.value.length < 8) {
+      e.preventDefault();
+      alert('Passordet må være minst 8 tegn langt.');
+      return false;
+    }
+    
+    if (password.value !== confirmPassword.value) {
+      e.preventDefault();
+      alert('Passordene stemmer ikke overens.');
+      return false;
+    }
+    
+    return true;
+  });
+});
+</script>
 
 <%- include('../partials/footer') %>

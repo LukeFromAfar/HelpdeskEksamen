@@ -10,17 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Get all ticket rows
   const ticketRows = document.querySelectorAll('#adminTicketList tr');
   
-  // Hide closed tickets initially
-  ticketRows.forEach(row => {
-    if (row.getAttribute('data-closed') === 'true') {
-      row.style.display = 'none';
-    }
-  });
+  // Set default status filter to "all" (including closed tickets)
+  statusFilter.value = 'all';
   
-  // Set initial count of visible rows
-  const initialVisibleCount = Array.from(ticketRows).filter(row => 
-    row.style.display !== 'none'
-  ).length;
+  // Count all rows since we're showing everything initially
+  const initialVisibleCount = ticketRows.length;
   
   updateTicketCount(initialVisibleCount, ticketRows.length);
   

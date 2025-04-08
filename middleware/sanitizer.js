@@ -28,17 +28,15 @@ const sanitizeComment = [
   }
 ];
 
-// Simplified middleware to sanitize user registration inputs
+// Simplified middleware to sanitize and validate user registration inputs
 const sanitizeUserRegistration = [
   body('name').trim(),
-  body('email').trim().normalizeEmail({ lowercase: true }),
+  body('email').trim().isEmail().optional({ checkFalsy: true }).normalizeEmail({ lowercase: true }),
   body('password').trim(),
   body('confirmPassword').trim(),
   (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.error('Validation errors:', errors.array());
-    }
+    // Continue to the next middleware even if there are validation errors
+    // The controller will handle the actual validation
     next();
   }
 ];
@@ -48,10 +46,8 @@ const sanitizeLogin = [
   body('email').trim().normalizeEmail({ lowercase: true }),
   body('password').trim(),
   (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.error('Validation errors:', errors.array());
-    }
+    // Continue to the next middleware even if there are validation errors
+    // The controller will handle the actual validation
     next();
   }
 ];

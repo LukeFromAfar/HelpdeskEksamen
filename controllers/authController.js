@@ -18,6 +18,13 @@ const authController = {
     try {
       const { email, password } = req.body;
       
+      if (!email || !password) {
+        return res.status(400).render('auth/login', {
+          title: 'Logg inn',
+          error: 'E-post og passord er påkrevd'
+        });
+      }
+      
       // Check if user exists
       const user = await User.findOne({ email });
       if (!user) {
@@ -67,11 +74,35 @@ const authController = {
     try {
       const { name, email, password, confirmPassword } = req.body;
       
+      if (!name || !email || !password || !confirmPassword) {
+        return res.status(400).render('auth/register', {
+          title: 'Registrer deg',
+          error: 'Alle feltene er påkrevd'
+        });
+      }
+      
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).render('auth/register', {
+          title: 'Registrer deg',
+          error: 'Ugyldig e-postadresse'
+        });
+      }
+      
       // Check if passwords match
       if (password !== confirmPassword) {
         return res.status(400).render('auth/register', {
           title: 'Registrer deg',
           error: 'Passordene stemmer ikke overens'
+        });
+      }
+
+      // Check password length
+      if (password.length < 8) {
+        return res.status(400).render('auth/register', {
+          title: 'Registrer deg',
+          error: 'Passordet må være minst 8 tegn langt'
         });
       }
       
