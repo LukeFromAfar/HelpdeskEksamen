@@ -45,6 +45,7 @@ const ticketController = {
       const statusFilter = req.query.status || '';
       const priorityFilter = req.query.priority || '';
       const categoryFilter = req.query.category || '';
+      const searchQuery = req.query.search || ''; // Make sure this exists
       
       // Set up filter conditions
       const filterConditions = {};
@@ -56,6 +57,27 @@ const ticketController = {
       }
       if (categoryFilter) {
         filterConditions.category = categoryFilter;
+      }
+      
+      // Add search query handling
+      if (searchQuery) {
+        // Create a case-insensitive regex for search
+        const searchRegex = new RegExp(searchQuery, 'i');
+        
+        // First find users matching the search
+        const matchingUsers = await User.find({ name: searchRegex }, '_id');
+        const userIds = matchingUsers.map(user => user._id);
+        
+        // Set up $or conditions for search across multiple fields
+        filterConditions.$or = [
+          { title: searchRegex },
+          { _id: searchQuery.match(/^[0-9a-fA-F]{24}$/) ? searchQuery : null }
+        ];
+        
+        // Add user IDs to search if we found matching users
+        if (userIds.length > 0) {
+          filterConditions.$or.push({ user: { $in: userIds } });
+        }
       }
       
       // Get total count for pagination based on filters
@@ -122,6 +144,7 @@ const ticketController = {
           statusFilter,
           priorityFilter,
           categoryFilter,
+          search: searchQuery, // Pass search query to template
           stats: {
             openCount,
             inProgressCount,
@@ -191,6 +214,7 @@ const ticketController = {
             statusFilter,
             priorityFilter,
             categoryFilter,
+            search: searchQuery, // Pass search query to template
             stats: {
               openCount,
               inProgressCount,
@@ -249,6 +273,7 @@ const ticketController = {
         statusFilter,
         priorityFilter,
         categoryFilter,
+        search: searchQuery, // Pass search query to template
         stats: {
           openCount,
           inProgressCount,

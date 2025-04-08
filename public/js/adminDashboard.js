@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const priorityFilter = document.getElementById('priorityFilter');
   const sortSelector = document.getElementById('sortSelector');
   const clearSearchBtn = document.getElementById('clearSearch');
+  const searchBtn = document.getElementById('searchBtn'); // New search button
   const ticketCount = document.getElementById('ticketCount');
   
   // Get all ticket rows
@@ -16,55 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
   
   updateTicketCount(initialVisibleCount, ticketRows.length);
   
-  // Add event listeners for filter changes
-  ticketSearch.addEventListener('input', applyFilters);
+  // Enter key in search field
+  ticketSearch.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent form submission
+      applyServerFilters();
+    }
+  });
+
+  // Search button click event
+  searchBtn.addEventListener('click', () => {
+    applyServerFilters();
+  });
+
+  // Clear search button
+  clearSearchBtn.addEventListener('click', () => {
+    ticketSearch.value = '';
+    applyServerFilters();
+  });
   
   // Add server-side filtering to dropdown filters
   statusFilter.addEventListener('change', () => applyServerFilters());
   categoryFilter.addEventListener('change', () => applyServerFilters());
   priorityFilter.addEventListener('change', () => applyServerFilters());
   
-  // Clear search button
-  clearSearchBtn.addEventListener('click', () => {
-    ticketSearch.value = '';
-    applyFilters();
-  });
-  
   // Sort selector event listener
   sortSelector.addEventListener('change', () => {
     const [field, order] = sortSelector.value.split(':');
     applyServerFilters(field, order);
   });
-  
-  /**
-   * Apply client-side filtering for search
-   */
-  function applyFilters() {
-    const searchTerm = ticketSearch.value.trim().toLowerCase();
-    
-    let visibleCount = 0;
-    
-    ticketRows.forEach(row => {
-      const id = row.querySelector('td:nth-child(1)').textContent.trim();
-      const title = row.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
-      const username = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
-      
-      // Check if the row satisfies search condition
-      const matchesSearch = searchTerm === '' || 
-                           title.toLowerCase().includes(searchTerm) || 
-                           username.includes(searchTerm) || 
-                           id.toLowerCase().includes(searchTerm);
-      
-      // Show or hide the row
-      row.style.display = matchesSearch ? '' : 'none';
-      
-      // Count visible rows
-      if (matchesSearch) visibleCount++;
-    });
-    
-    // Update the count display
-    updateTicketCount(visibleCount, ticketRows.length);
-  }
   
   /**
    * Apply server-side filtering by reloading the page with filter parameters
@@ -79,6 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Build the new URL with filters
     let url = `/api/tickets/admin?page=1&sortField=${sortField}&sortOrder=${sortOrder}`;
+    
+    // Add search term to URL if present
+    const searchTerm = ticketSearch.value.trim();
+    if (searchTerm) {
+      url += `&search=${encodeURIComponent(searchTerm)}`;
+    }
     
     const status = statusFilter.value;
     if (status) {

@@ -62,7 +62,10 @@
       <div class="row g-3">
         <div class="col-md-4">
           <div class="input-group">
-            <input type="text" id="ticketSearch" class="form-control" placeholder="Søk på tittel, brukernavn eller ID...">
+            <input type="text" id="ticketSearch" class="form-control" placeholder="Søk på tittel, brukernavn eller ID..." value="<%= typeof search !== 'undefined' ? search : '' %>">
+            <button class="btn btn-primary" type="button" id="searchBtn">
+              <i class="bi bi-search"></i> Søk
+            </button>
             <button class="btn btn-outline-secondary" type="button" id="clearSearch">
               <i class="bi bi-x"></i> Tøm
             </button>
@@ -187,23 +190,23 @@
           <nav aria-label="Sidenavigasjon">
             <ul class="pagination mb-0">
               <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=1&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Første</a>
+                <a class="page-link" href="/api/tickets/admin?page=1&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Første</a>
               </li>
               <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage - 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Forrige</a>
+                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage - 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Forrige</a>
               </li>
               
               <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
                 <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                  <a class="page-link" href="/api/tickets/admin?page=<%= i %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>"><%= i %></a>
+                  <a class="page-link" href="/api/tickets/admin?page=<%= i %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>"><%= i %></a>
                 </li>
               <% } %>
               
               <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage + 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Neste</a>
+                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage + 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Neste</a>
               </li>
               <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=<%= totalPages %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Siste</a>
+                <a class="page-link" href="/api/tickets/admin?page=<%= totalPages %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Siste</a>
               </li>
             </ul>
           </nav>
