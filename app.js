@@ -7,7 +7,6 @@ const http = require('http');
 const socketIo = require('socket.io');
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
-const xssProtection = require('./middleware/xssProtection');
 const connectDB = require('./config/db');
 
 // Import routes
@@ -23,26 +22,15 @@ const io = socketIo(server);
 // Connect to MongoDB
 connectDB();
 
-// Security middleware
+// Simplified Helmet configuration for HTTP
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'cdn.jsdelivr.net', "'unsafe-inline'"],
-      styleSrc: ["'self'", 'cdn.jsdelivr.net', "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:'],
-      fontSrc: ["'self'", 'cdn.jsdelivr.net'],
-      connectSrc: ["'self'", 'ws:', 'wss:']
-    }
-  },
-  crossOriginEmbedderPolicy: false, // Allow loading resources from different origins
+  contentSecurityPolicy: false, // Disable CSP for HTTP compatibility
+  crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false,
+  crossOriginResourcePolicy: false,
   xssFilter: true,
-  noSniff: true,
   hidePoweredBy: true
 }));
-
-// Apply XSS Protection middleware
-app.use(xssProtection);
 
 // Middleware
 app.use(express.json());

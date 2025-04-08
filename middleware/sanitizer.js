@@ -1,12 +1,12 @@
-const { body, param, query, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 
-// Middleware to sanitize and validate ticket inputs
+// Simplified middleware to sanitize and validate ticket inputs
 const sanitizeTicket = [
-  body('title').trim().escape(),
+  body('title').trim(),
   body('description').trim(),
-  body('category').trim().escape(),
-  body('priority').trim().escape(),
-  body('status').trim().escape(),
+  body('category').trim(),
+  body('priority').trim(),
+  body('status').trim(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -16,7 +16,7 @@ const sanitizeTicket = [
   }
 ];
 
-// Middleware to sanitize comment inputs
+// Simplified middleware to sanitize comment inputs
 const sanitizeComment = [
   body('text').trim(),
   (req, res, next) => {
@@ -28,10 +28,10 @@ const sanitizeComment = [
   }
 ];
 
-// Middleware to sanitize user registration inputs
+// Simplified middleware to sanitize user registration inputs
 const sanitizeUserRegistration = [
-  body('name').trim().escape(),
-  body('email').trim().normalizeEmail(),
+  body('name').trim(),
+  body('email').trim().normalizeEmail({ lowercase: true }),
   body('password').trim(),
   body('confirmPassword').trim(),
   (req, res, next) => {
@@ -43,9 +43,9 @@ const sanitizeUserRegistration = [
   }
 ];
 
-// Middleware to sanitize login inputs
+// Simplified middleware to sanitize login inputs
 const sanitizeLogin = [
-  body('email').trim().normalizeEmail(),
+  body('email').trim().normalizeEmail({ lowercase: true }),
   body('password').trim(),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -56,9 +56,9 @@ const sanitizeLogin = [
   }
 ];
 
-// Middleware to sanitize URL parameters
+// Simplified middleware to sanitize URL parameters
 const sanitizeParams = [
-  param('*').trim().escape(),
+  param('*').trim(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
