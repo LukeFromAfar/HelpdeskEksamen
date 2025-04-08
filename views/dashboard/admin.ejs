@@ -71,32 +71,46 @@
         </div>
         <div class="col-md-8">
           <div class="row g-2">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <select class="form-select" id="statusFilter">
                 <option value="">Alle aktive statuser</option>
-                <option value="Åpen">Åpen</option>
-                <option value="Under arbeid">Under arbeid</option>
-                <option value="Løst">Løst</option>
-                <option value="Lukket" class="text-muted">Lukket</option>
-                <option value="all" selected>Vis alle (inkl lukket)</option>
+                <option value="Åpen" <%= statusFilter === 'Åpen' ? 'selected' : '' %>>Åpen</option>
+                <option value="Under arbeid" <%= statusFilter === 'Under arbeid' ? 'selected' : '' %>>Under arbeid</option>
+                <option value="Løst" <%= statusFilter === 'Løst' ? 'selected' : '' %>>Løst</option>
+                <option value="Lukket" <%= statusFilter === 'Lukket' ? 'selected' : '' %> class="text-muted">Lukket</option>
+                <option value="all" <%= statusFilter === 'all' || !statusFilter ? 'selected' : '' %>>Vis alle (inkl lukket)</option>
               </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <select class="form-select" id="categoryFilter">
-                <option value="">Alle kategorier</option>
-                <option value="Hardware">Hardware</option>
-                <option value="Software">Software</option>
-                <option value="Nettverk">Nettverk</option>
-                <option value="Konto">Konto/Tilgang</option>
-                <option value="Annet">Annet</option>
+                <option value="" <%= !categoryFilter ? 'selected' : '' %>>Alle kategorier</option>
+                <option value="Hardware" <%= categoryFilter === 'Hardware' ? 'selected' : '' %>>Hardware</option>
+                <option value="Software" <%= categoryFilter === 'Software' ? 'selected' : '' %>>Software</option>
+                <option value="Nettverk" <%= categoryFilter === 'Nettverk' ? 'selected' : '' %>>Nettverk</option>
+                <option value="Konto" <%= categoryFilter === 'Konto' ? 'selected' : '' %>>Konto/Tilgang</option>
+                <option value="Annet" <%= categoryFilter === 'Annet' ? 'selected' : '' %>>Annet</option>
               </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <select class="form-select" id="priorityFilter">
-                <option value="">Alle prioriteter</option>
-                <option value="Høy">Høy</option>
-                <option value="Medium">Medium</option>
-                <option value="Lav">Lav</option>
+                <option value="" <%= !priorityFilter ? 'selected' : '' %>>Alle prioriteter</option>
+                <option value="Høy" <%= priorityFilter === 'Høy' ? 'selected' : '' %>>Høy</option>
+                <option value="Medium" <%= priorityFilter === 'Medium' ? 'selected' : '' %>>Medium</option>
+                <option value="Lav" <%= priorityFilter === 'Lav' ? 'selected' : '' %>>Lav</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select class="form-select" id="sortSelector">
+                <option value="createdAt:desc" <%= sortField === 'createdAt' && sortOrder === 'desc' ? 'selected' : '' %>>Nyeste først</option>
+                <option value="createdAt:asc" <%= sortField === 'createdAt' && sortOrder === 'asc' ? 'selected' : '' %>>Eldste først</option>
+                <option value="title:asc" <%= sortField === 'title' && sortOrder === 'asc' ? 'selected' : '' %>>Tittel A-Å</option>
+                <option value="title:desc" <%= sortField === 'title' && sortOrder === 'desc' ? 'selected' : '' %>>Tittel Å-A</option>
+                <option value="user.name:asc" <%= sortField === 'user.name' && sortOrder === 'asc' ? 'selected' : '' %>>Bruker A-Å</option>
+                <option value="user.name:desc" <%= sortField === 'user.name' && sortOrder === 'desc' ? 'selected' : '' %>>Bruker Å-A</option>
+                <option value="category:asc" <%= sortField === 'category' && sortOrder === 'asc' ? 'selected' : '' %>>Kategori A-Å</option>
+                <option value="category:desc" <%= sortField === 'category' && sortOrder === 'desc' ? 'selected' : '' %>>Kategori Å-A</option>
+                <option value="priority:asc" <%= sortField === 'priority' && sortOrder === 'asc' ? 'selected' : '' %>>Prioritet (Lav → Medium → Høy)</option>
+                <option value="priority:desc" <%= sortField === 'priority' && sortOrder === 'desc' ? 'selected' : '' %>>Prioritet (Høy → Medium → Lav)</option>
               </select>
             </div>
           </div>
@@ -163,6 +177,36 @@
               <% }) %>
             </tbody>
           </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <div>
+            Viser <%= tickets.length %> av <%= totalTickets %> henvendelser
+          </div>
+          <nav aria-label="Sidenavigasjon">
+            <ul class="pagination mb-0">
+              <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/tickets/admin?page=1&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Første</a>
+              </li>
+              <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage - 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Forrige</a>
+              </li>
+              
+              <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                  <a class="page-link" href="/api/tickets/admin?page=<%= i %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>"><%= i %></a>
+                </li>
+              <% } %>
+              
+              <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage + 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Neste</a>
+              </li>
+              <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/tickets/admin?page=<%= totalPages %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %>">Siste</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       <% } %>
     </div>

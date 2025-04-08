@@ -32,14 +32,200 @@ const ticketController = {
   // Admin dashboard - show all tickets with stats
   adminDashboard: async (req, res) => {
     try {
-      // Get all tickets for admin view
-      const allTickets = await Ticket.find()
-        .sort({ createdAt: -1 })
+      // Get pagination parameters from query string
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10; // Number of tickets per page
+      const skip = (page - 1) * limit;
+      
+      // Get sorting parameters
+      const sortField = req.query.sortField || 'createdAt';
+      const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
+      
+      // Get filter parameters
+      const statusFilter = req.query.status || '';
+      const priorityFilter = req.query.priority || '';
+      const categoryFilter = req.query.category || '';
+      
+      // Set up filter conditions
+      const filterConditions = {};
+      if (statusFilter && statusFilter !== 'all') {
+        filterConditions.status = statusFilter;
+      }
+      if (priorityFilter) {
+        filterConditions.priority = priorityFilter;
+      }
+      if (categoryFilter) {
+        filterConditions.category = categoryFilter;
+      }
+      
+      // Get total count for pagination based on filters
+      const totalTickets = await Ticket.countDocuments(filterConditions);
+      const totalPages = Math.ceil(totalTickets / limit);
+      
+      // Special handling for priority field - we need a custom sort order
+      if (sortField === 'priority') {
+        // Correct priority sorting with custom order
+        // For priority, we'll use a custom pipeline to ensure correct ordering
+        const allTickets = await Ticket.aggregate([
+          { $match: filterConditions },
+          {
+            $addFields: {
+              priorityOrder: {
+                $cond: { 
+                  if: { $eq: ["$priority", "Lav"] }, 
+                  then: 1, 
+                  else: { 
+                    $cond: { 
+                      if: { $eq: ["$priority", "Medium"] }, 
+                      then: 2, 
+                      else: 3  // Høy
+                    } 
+                  } 
+                }
+              }
+            }
+          },
+          { $sort: { priorityOrder: sortOrder } },
+          { $skip: skip },
+          { $limit: limit }
+        ]);
+        
+        // Now populate the user field since aggregate doesn't support populate
+        const populatedTickets = await Ticket.populate(allTickets, { path: 'user', select: 'name email' });
+        
+        // Get all tickets for statistics (no pagination)
+        const allTicketsForStats = await Ticket.find();
+        
+        // Filter out closed tickets for statistics and default view
+        const activeTickets = allTicketsForStats.filter(ticket => ticket.status !== 'Lukket');
+        const closedTickets = allTicketsForStats.filter(ticket => ticket.status === 'Lukket');
+        
+        // Calculate stats - only for active tickets
+        const openCount = activeTickets.filter(ticket => ticket.status === 'Åpen').length;
+        const inProgressCount = activeTickets.filter(ticket => ticket.status === 'Under arbeid').length;
+        const solvedCount = activeTickets.filter(ticket => ticket.status === 'Løst').length;
+        
+        // Priority stats - only for active tickets
+        const highPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Høy').length;
+        const mediumPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Medium').length;
+        const lowPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Lav').length;
+        
+        return res.render('dashboard/admin', { 
+          title: 'Admin dashbord', 
+          user: req.user, 
+          tickets: populatedTickets, 
+          currentPage: page,
+          totalPages: totalPages,
+          totalTickets: totalTickets,
+          sortField: sortField,
+          sortOrder: req.query.sortOrder || 'desc',
+          statusFilter,
+          priorityFilter,
+          categoryFilter,
+          stats: {
+            openCount,
+            inProgressCount,
+            solvedCount,
+            highPriorityCount,
+            mediumPriorityCount,
+            lowPriorityCount,
+            total: activeTickets.length,
+            closed: closedTickets.length
+          }
+        });
+      } 
+      // Special handling for user name field
+      else if (sortField === 'user.name') {
+        // Fix user name sorting
+        try {
+          const allTickets = await Ticket.aggregate([
+            { $match: filterConditions },
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'userObject'
+              }
+            },
+            { $unwind: '$userObject' },
+            { 
+              $sort: { 'userObject.name': sortOrder } 
+            },
+            { $skip: skip },
+            { $limit: limit }
+          ]);
+          
+          // Populate the full user data
+          const populatedTickets = await Ticket.populate(allTickets, {
+            path: 'user',
+            select: 'name email role'
+          });
+          
+          // Get all tickets for statistics (no pagination)
+          const allTicketsForStats = await Ticket.find();
+          
+          // Filter out closed tickets for statistics
+          const activeTickets = allTicketsForStats.filter(ticket => ticket.status !== 'Lukket');
+          const closedTickets = allTicketsForStats.filter(ticket => ticket.status === 'Lukket');
+          
+          // Calculate stats - only for active tickets
+          const openCount = activeTickets.filter(ticket => ticket.status === 'Åpen').length;
+          const inProgressCount = activeTickets.filter(ticket => ticket.status === 'Under arbeid').length;
+          const solvedCount = activeTickets.filter(ticket => ticket.status === 'Løst').length;
+          
+          // Priority stats - only for active tickets
+          const highPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Høy').length;
+          const mediumPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Medium').length;
+          const lowPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Lav').length;
+          
+          return res.render('dashboard/admin', { 
+            title: 'Admin dashbord', 
+            user: req.user, 
+            tickets: populatedTickets, 
+            currentPage: page,
+            totalPages: totalPages,
+            totalTickets: totalTickets,
+            sortField: sortField,
+            sortOrder: req.query.sortOrder || 'desc',
+            statusFilter,
+            priorityFilter,
+            categoryFilter,
+            stats: {
+              openCount,
+              inProgressCount,
+              solvedCount,
+              highPriorityCount,
+              mediumPriorityCount,
+              lowPriorityCount,
+              total: activeTickets.length,
+              closed: closedTickets.length
+            }
+          });
+        } catch (error) {
+          console.error('Error in user.name sorting:', error);
+          // Fall back to default sorting if aggregation fails
+          sortObj = { createdAt: -1 };
+        }
+      }
+      
+      // Standard handling for other fields
+      const sortObj = {};
+      sortObj[sortField] = sortOrder;
+      
+      // Get all tickets for admin view with pagination and sorting
+      const allTickets = await Ticket.find(filterConditions)
+        .sort(sortObj)
+        .skip(skip)
+        .limit(limit)
         .populate('user', 'name email');
       
+      // Get all tickets for statistics (no pagination)
+      const allTicketsForStats = await Ticket.find();
+      
       // Filter out closed tickets for statistics and default view
-      const activeTickets = allTickets.filter(ticket => ticket.status !== 'Lukket');
-      const closedTickets = allTickets.filter(ticket => ticket.status === 'Lukket');
+      const activeTickets = allTicketsForStats.filter(ticket => ticket.status !== 'Lukket');
+      const closedTickets = allTicketsForStats.filter(ticket => ticket.status === 'Lukket');
       
       // Calculate stats - only for active tickets
       const openCount = activeTickets.filter(ticket => ticket.status === 'Åpen').length;
@@ -54,7 +240,15 @@ const ticketController = {
       res.render('dashboard/admin', { 
         title: 'Admin dashbord', 
         user: req.user, 
-        tickets: allTickets, // Send all tickets to the view
+        tickets: allTickets,
+        currentPage: page,
+        totalPages: totalPages,
+        totalTickets: totalTickets,
+        sortField: sortField,
+        sortOrder: req.query.sortOrder || 'desc',
+        statusFilter,
+        priorityFilter,
+        categoryFilter,
         stats: {
           openCount,
           inProgressCount,
