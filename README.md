@@ -7,10 +7,16 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - User authentication (login/register)
 - Role-based access control (user and admin roles)
 - Ticket creation and management
+  - Status tracking (Open, In Progress, Solved, Closed)
+  - Priority levels (High, Medium, Low)
+  - Category classification
+  - Comment thread on each ticket
+  - Ticket history tracking
 - Real-time notifications via Socket.IO
 - Responsive design for desktop and mobile
 - Dark mode support
 - Comprehensive security features
+- Admin dashboard with statistics and filtering options
 
 ## Tech Stack
 
@@ -20,6 +26,8 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - **Authentication**: JWT stored in HTTP-only cookies
 - **Password Hashing**: Argon2
 - **Real-time Communication**: Socket.IO
+- **Charts**: Chart.js for data visualization
+- **Deployment**: GitHub Actions for CI/CD
 
 ## API Documentation
 
@@ -55,17 +63,19 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 ## Security Features
 
 - **JWT Authentication**: Tokens stored in HTTP-only cookies
-- **Password Hashing**: Argon2 algorithm
+- **Password Hashing**: Argon2 algorithm for secure password storage
 - **Rate Limiting**: Protection against brute force attacks
-- **Route Protection**: Role-based middleware
+  - Login attempts limited to 20 per 2 minutes
+  - API requests limited to 100 per 15 minutes
+- **Route Protection**: Role-based middleware for authorization
 - **Input Validation**: Server-side validation of form inputs
 - **Helmet Security Headers**: Protection against various common web vulnerabilities
-- **Content Security Policy (CSP)**: Controls resources the user agent is allowed to load
 - **XSS Protection**: Guards against cross-site scripting attacks
 - **Input Sanitization**: Clean user inputs to prevent injection attacks
 - **CSRF Protection**: Through same-site cookie attributes
 - **Secure HTTP Headers**: Protection against clickjacking, MIME sniffing, etc.
 - **Hidden Server Information**: Removes X-Powered-By header
+- **Error Handling**: Limited exposure of error details in production
 
 ## Socket.IO Events
 
@@ -91,7 +101,7 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - description: String (required)
 - category: String (required)
 - user: ObjectId (reference to User model)
-- status: String (enum: 'Åpen', 'Under arbeid', 'Løst', default: 'Åpen')
+- status: String (enum: 'Åpen', 'Under arbeid', 'Løst', 'Lukket', default: 'Åpen')
 - priority: String (enum: 'Lav', 'Medium', 'Høy', default: 'Medium')
 - comments: Array of Comment subdocuments
 - history: Array of History subdocuments
@@ -122,14 +132,28 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Create .env file with required environment variables:
-   - PORT=3000
-   - MONGODB_URI=mongodb://localhost:27017/helpdesk
-   - JWT_SECRET=your_secret_key
-   - NODE_ENV=development
+   ```
+   PORT=3000
+   MONGODB_URI=mongodb://localhost:27017/helpdesk
+   JWT_SECRET=your_secret_key
+   NODE_ENV=development
+   ```
 4. Start the application:
    - Development: `npm run dev`
    - Production: `npm start`
 
+## Development Practices
+
+- **Code Organization**: MVC pattern (Models, Views, Controllers)
+- **Error Handling**: Centralized error handling middleware
+- **Configuration**: Environment-based configuration using dotenv
+- **Logging**: Console logging for development, file logging for production
+- **Comments**: Code is thoroughly commented for future maintenance
+
 ## Deployment
 
 This application includes GitHub Actions workflows for CI/CD pipeline, automatically deploying to a self-hosted runner when changes are pushed to the main branch.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
