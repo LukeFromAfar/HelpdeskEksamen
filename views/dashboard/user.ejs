@@ -10,13 +10,13 @@
   <div class="card mb-4">
     <div class="card-body">
       <h5 class="card-title">Velkommen, <%= user.name %></h5>
-      <p class="card-text">Her kan du se alle dine henvendelser og deres status.</p>
+      <p class="card-text">Her kan du se alle dine aktive henvendelser og deres status.</p>
     </div>
   </div>
   
   <% if (tickets.length === 0) { %>
     <div class="alert alert-info" role="alert">
-      Du har ingen henvendelser enda. Opprett din første henvendelse nå!
+      Du har ingen aktive henvendelser enda. Opprett din første henvendelse nå!
     </div>
   <% } else { %>
     <div class="table-responsive">
@@ -41,7 +41,8 @@
               <td>
                 <span class="badge bg-<%= 
                   ticket.status === 'Åpen' ? 'danger' : 
-                  ticket.status === 'Under arbeid' ? 'warning' : 'success' 
+                  ticket.status === 'Under arbeid' ? 'warning' : 
+                  ticket.status === 'Løst' ? 'success' : 'secondary' 
                 %>"><%= ticket.status %></span>
               </td>
               <td>

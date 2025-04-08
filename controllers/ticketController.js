@@ -5,7 +5,12 @@ const ticketController = {
   // User dashboard - show user's tickets
   userDashboard: async (req, res) => {
     try {
-      const tickets = await Ticket.find({ user: req.user._id }).sort({ createdAt: -1 });
+      // Only show non-closed tickets by default for users
+      const tickets = await Ticket.find({ 
+        user: req.user._id,
+        status: { $ne: 'Lukket' } 
+      }).sort({ createdAt: -1 });
+      
       res.render('dashboard/user', { 
         title: 'Mitt dashbord', 
         user: req.user, 
@@ -23,22 +28,29 @@ const ticketController = {
   // Admin dashboard - show all tickets with stats
   adminDashboard: async (req, res) => {
     try {
-      const tickets = await Ticket.find().sort({ createdAt: -1 }).populate('user', 'name email');
+      // Get all tickets for admin view
+      const allTickets = await Ticket.find()
+        .sort({ createdAt: -1 })
+        .populate('user', 'name email');
       
-      // Calculate stats
-      const openCount = tickets.filter(ticket => ticket.status === 'Åpen').length;
-      const inProgressCount = tickets.filter(ticket => ticket.status === 'Under arbeid').length;
-      const solvedCount = tickets.filter(ticket => ticket.status === 'Løst').length;
+      // Filter out closed tickets for statistics and default view
+      const activeTickets = allTickets.filter(ticket => ticket.status !== 'Lukket');
+      const closedTickets = allTickets.filter(ticket => ticket.status === 'Lukket');
       
-      // Priority stats
-      const highPriorityCount = tickets.filter(ticket => ticket.priority === 'Høy').length;
-      const mediumPriorityCount = tickets.filter(ticket => ticket.priority === 'Medium').length;
-      const lowPriorityCount = tickets.filter(ticket => ticket.priority === 'Lav').length;
+      // Calculate stats - only for active tickets
+      const openCount = activeTickets.filter(ticket => ticket.status === 'Åpen').length;
+      const inProgressCount = activeTickets.filter(ticket => ticket.status === 'Under arbeid').length;
+      const solvedCount = activeTickets.filter(ticket => ticket.status === 'Løst').length;
+      
+      // Priority stats - only for active tickets
+      const highPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Høy').length;
+      const mediumPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Medium').length;
+      const lowPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Lav').length;
       
       res.render('dashboard/admin', { 
         title: 'Admin dashbord', 
         user: req.user, 
-        tickets,
+        tickets: allTickets, // Send all tickets to the view
         stats: {
           openCount,
           inProgressCount,
@@ -46,7 +58,8 @@ const ticketController = {
           highPriorityCount,
           mediumPriorityCount,
           lowPriorityCount,
-          total: tickets.length
+          total: activeTickets.length,
+          closed: closedTickets.length
         }
       });
     } catch (error) {

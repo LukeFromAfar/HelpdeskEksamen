@@ -33,7 +33,9 @@
                 <option value="Åpen" <%= ticket.status === 'Åpen' ? 'selected' : '' %>>Åpen</option>
                 <option value="Under arbeid" <%= ticket.status === 'Under arbeid' ? 'selected' : '' %>>Under arbeid</option>
                 <option value="Løst" <%= ticket.status === 'Løst' ? 'selected' : '' %>>Løst</option>
+                <option value="Lukket" <%= ticket.status === 'Lukket' ? 'selected' : '' %>>Lukket</option>
               </select>
+              <small class="form-text text-muted">Lukket status vil fjerne billetten fra statistikken og hovedoversikten.</small>
             </div>
             <div class="mb-3">
               <label for="priority" class="form-label">Prioritet</label>

@@ -115,6 +115,12 @@ body {
   100% { background-color: transparent; }
 }
 
+/* Badge styles for Lukket status */
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
 /* Comments Section */
 .comments-container {
   max-height: 400px;

@@ -10,8 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Get all ticket rows
   const ticketRows = document.querySelectorAll('#adminTicketList tr');
   
-  // Set initial count
-  updateTicketCount(ticketRows.length);
+  // Hide closed tickets initially
+  ticketRows.forEach(row => {
+    if (row.getAttribute('data-closed') === 'true') {
+      row.style.display = 'none';
+    }
+  });
+  
+  // Set initial count of visible rows
+  const initialVisibleCount = Array.from(ticketRows).filter(row => 
+    row.style.display !== 'none'
+  ).length;
+  
+  updateTicketCount(initialVisibleCount, ticketRows.length);
   
   // Add event listeners for filter changes
   ticketSearch.addEventListener('input', applyFilters);
@@ -45,14 +56,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const status = statusBadge ? statusBadge.textContent.trim() : '';
       const priorityBadge = row.querySelector('td:nth-child(6) .badge');
       const priority = priorityBadge ? priorityBadge.textContent.trim() : '';
+      const isClosed = row.getAttribute('data-closed') === 'true';
       
       // Check if the row satisfies all filter conditions
       const matchesSearch = searchTerm === '' || 
                            title.toLowerCase().includes(searchTerm) || 
                            username.includes(searchTerm) || 
                            id.toLowerCase().includes(searchTerm);
-                           
-      const matchesStatus = statusValue === '' || status === statusValue;
+      
+      // Special handling for status filter
+      let matchesStatus = true;
+      if (statusValue === '') {
+        // If no status filter selected, show only non-closed tickets
+        matchesStatus = !isClosed;
+      } else if (statusValue === 'all') {
+        // If "all" is selected, show all tickets including closed ones
+        matchesStatus = true;
+      } else {
+        // Otherwise, match the specific status
+        matchesStatus = status === statusValue;
+      }
+      
       const matchesCategory = categoryValue === '' || category === categoryValue;
       const matchesPriority = priorityValue === '' || priority === priorityValue;
       

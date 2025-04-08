@@ -11,12 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     open: '#dc3545',       // Red (danger)
     inProgress: '#ffc107', // Yellow (warning)
     solved: '#198754',     // Green (success)
+    closed: '#6c757d',     // Gray (secondary) - not used in chart
     high: '#dc3545',       // Red (danger)
     medium: '#ffc107',     // Yellow (warning)
     low: '#0dcaf0'         // Light blue (info)
   };
   
-  // Create Status Distribution chart
+  // Create Status Distribution chart - excluding closed tickets
   const statusChart = new Chart(statusChartContext, {
     type: 'doughnut',
     data: {
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         title: {
           display: true,
-          text: 'Status fordeling',
+          text: 'Status fordeling (aktive henvendelser)',
           font: {
             size: 16
           }
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-  // Create Priority Distribution chart
+  // Create Priority Distribution chart - excluding closed tickets
   const priorityChart = new Chart(priorityChartContext, {
     type: 'doughnut',
     data: {
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         title: {
           display: true,
-          text: 'Prioritet fordeling',
+          text: 'Prioritet fordeling (aktive henvendelser)',
           font: {
             size: 16
           }

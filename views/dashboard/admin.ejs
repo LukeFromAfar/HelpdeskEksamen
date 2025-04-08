@@ -18,13 +18,14 @@
               <span class="badge bg-danger me-1">Åpne: <%= stats.openCount %></span>
               <span class="badge bg-warning me-1">Under arbeid: <%= stats.inProgressCount %></span>
               <span class="badge bg-success">Løst: <%= stats.solvedCount %></span>
+              <span class="badge bg-secondary ms-2">Lukket: <%= stats.closed %> (ikke i diagram)</span>
             </div>
           </div>
           <div class="chart-container" style="position: relative; height: 250px;">
             <canvas id="statusChart"></canvas>
           </div>
           <div class="text-center mt-2">
-            <strong>Totalt: <%= stats.total %> henvendelser</strong>
+            <strong>Aktive: <%= stats.total %> henvendelser</strong>
           </div>
         </div>
       </div>
@@ -72,10 +73,12 @@
           <div class="row g-2">
             <div class="col-md-4">
               <select class="form-select" id="statusFilter">
-                <option value="">Alle statuser</option>
+                <option value="">Alle aktive statuser</option>
                 <option value="Åpen">Åpen</option>
                 <option value="Under arbeid">Under arbeid</option>
                 <option value="Løst">Løst</option>
+                <option value="Lukket">Lukket</option>
+                <option value="all">Vis alle (inkl. lukket)</option>
               </select>
             </div>
             <div class="col-md-4">
@@ -131,7 +134,9 @@
             </thead>
             <tbody id="adminTicketList">
               <% tickets.forEach(ticket => { %>
-                <tr class="ticket-row" data-id="<%= ticket._id %>">
+                <tr class="ticket-row" data-id="<%= ticket._id %>" 
+                    data-status="<%= ticket.status %>" 
+                    <%= ticket.status === 'Lukket' ? 'data-closed="true"' : '' %>>
                   <td><%= ticket._id %></td>
                   <td class="ticket-title" title="<%= ticket.title %>"><%= ticket.title %></td>
                   <td><%= ticket.user ? ticket.user.name : 'Ukjent' %></td>
@@ -139,7 +144,8 @@
                   <td>
                     <span class="badge bg-<%= 
                       ticket.status === 'Åpen' ? 'danger' : 
-                      ticket.status === 'Under arbeid' ? 'warning' : 'success' 
+                      ticket.status === 'Under arbeid' ? 'warning' : 
+                      ticket.status === 'Løst' ? 'success' : 'secondary' 
                     %>"><%= ticket.status %></span>
                   </td>
                   <td>
