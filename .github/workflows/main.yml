@@ -1,0 +1,29 @@
+name: Deploy NodeJS Application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Pull latest changes
+      run: |
+        cd /var/www/HelpdeskEksamen
+        git pull origin main
+        
+    - name: Reload PM2
+      run: |
+        pm2 reload HelpdeskEksamen
+        
+    - name: Verify deployment
+      run: |
+        echo "Deployment completed successfully at $(date)"
