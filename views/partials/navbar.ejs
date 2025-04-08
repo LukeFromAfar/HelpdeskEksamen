@@ -20,6 +20,13 @@
           </li>
         <% } %>
       </ul>
+      <div class="dark-mode-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-text d-none d-sm-inline">Mørkt tema</span>
+      </div>
       <ul class="navbar-nav">
         <% if (typeof user !== 'undefined') { %>
           <li class="nav-item dropdown">

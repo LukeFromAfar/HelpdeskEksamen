@@ -1,0 +1,494 @@
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Navbar */
+body.dark-mode .navbar {
+  background-color: #1e1e1e !important;
+  border-bottom: 1px solid #333;
+}
+
+body.dark-mode .navbar-light .navbar-brand,
+body.dark-mode .navbar-light .navbar-nav .nav-link,
+body.dark-mode .navbar-light .navbar-nav .active > .nav-link {
+  color: #e0e0e0;
+}
+
+body.dark-mode .navbar-light .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(224, 224, 224, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Cards */
+body.dark-mode .card {
+  background-color: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark-mode .card-header {
+  background-color: #2a2a2a;
+  border-bottom-color: #333;
+}
+
+body.dark-mode .card.bg-primary {
+  background-color: #2a416b !important; /* Less bright blue */
+}
+
+body.dark-mode .card.bg-danger {
+  background-color: #6b2a2a !important; /* Less bright red */
+}
+
+body.dark-mode .card.bg-warning {
+  background-color: #6b5e2a !important; /* Less bright yellow */
+}
+
+body.dark-mode .card.bg-success {
+  background-color: #2a5c2a !important; /* Less bright green */
+}
+
+body.dark-mode .card.bg-info {
+  background-color: #2a566b !important; /* Less bright info */
+}
+
+body.dark-mode .card.bg-primary,
+body.dark-mode .card.bg-danger,
+body.dark-mode .card.bg-warning,
+body.dark-mode .card.bg-success,
+body.dark-mode .card.bg-info,
+body.dark-mode .card.bg-secondary {
+  color: #ffffff;
+}
+
+body.dark-mode .card.text-white {
+  color: #ffffff !important; /* Ensure white text is truly white */
+}
+
+/* Text colors - making dark grays lighter */
+body.dark-mode .text-muted {
+  color: #b0b0b0 !important;
+}
+
+body.dark-mode .text-dark {
+  color: #f0f0f0 !important;
+}
+
+body.dark-mode .text-body {
+  color: #e0e0e0 !important;
+}
+
+/* Additional text color overrides for dark mode */
+body.dark-mode p, 
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6, 
+body.dark-mode label,
+body.dark-mode .card-title,
+body.dark-mode .card-text {
+  color: #e0e0e0;
+}
+
+body.dark-mode small {
+  color: #b0b0b0;
+}
+
+/* Tables - making them darker with better contrast */
+body.dark-mode .table {
+  color: #e0e0e0; /* Less bright than pure white but still good contrast */
+  background-color: #222222 !important; /* Darker background */
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+  background-color: #2a2a2a !important; /* Darker striped rows */
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(even) {
+  background-color: #222222 !important; /* Base color for even rows */
+}
+
+body.dark-mode .table-hover tbody tr:hover {
+  background-color: #333333 !important; /* Darker on hover */
+}
+
+body.dark-mode .table td,
+body.dark-mode .table th {
+  background-color: #222222 !important; /* Enforce dark background on cells */
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) td {
+  background-color: #2a2a2a !important; /* Darker striped rows applied to cells */
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(even) td {
+  background-color: #222222 !important; /* Base color for even rows applied to cells */
+}
+
+body.dark-mode .table-hover tbody tr:hover td {
+  background-color: #333333 !important; /* Darker hover applied to cells */
+}
+
+body.dark-mode .table td,
+body.dark-mode .table th {
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .table th {
+  color: #ffffff; /* Ensure headers are bright */
+}
+
+body.dark-mode .table thead th {
+  background-color: #1a1a1a; /* Darker header background */
+  color: #ffffff; /* Keep headers bright for contrast */
+  border-bottom: 2px solid #444;
+}
+
+/* Specific text color fixes for tables */
+body.dark-mode .table a {
+  color: #6ea8fe;
+}
+
+body.dark-mode .table a:hover {
+  color: #9ec5fe;
+}
+
+/* Status badges - adjusted for dark mode but still colorful */
+body.dark-mode .badge.bg-danger {
+  background-color: #8b3a3a !important; /* Darker red */
+  color: #ffffff !important; /* Brighter text */
+}
+
+body.dark-mode .badge.bg-warning {
+  background-color: #8b7d3a !important; /* Darker yellow */
+  color: #ffffff !important; /* Brighter text */
+}
+
+body.dark-mode .badge.bg-success {
+  background-color: #3a6b3a !important; /* Darker green */
+  color: #ffffff !important; /* Brighter text */
+}
+
+body.dark-mode .badge.bg-info {
+  background-color: #2d6d8b !important; /* Darker blue */
+  color: #ffffff !important; /* Brighter text */
+}
+
+body.dark-mode .badge.bg-primary {
+  background-color: #3a5a8b !important; /* Darker blue */
+  color: #ffffff !important; /* Brighter text */
+}
+
+body.dark-mode .badge.bg-secondary {
+  background-color: #555555 !important; /* Darker gray */
+  color: #ffffff !important; /* Brighter text */
+}
+
+/* Forms */
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+  background-color: #2a2a2a;
+  border-color: #0d6efd;
+  color: #e0e0e0;
+}
+
+body.dark-mode .input-group-text {
+  background-color: #3a3a3a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+/* Form placeholder text in dark mode */
+body.dark-mode ::placeholder {
+  color: #bbbbbb !important;
+  opacity: 1;
+}
+
+body.dark-mode :-ms-input-placeholder {
+  color: #bbbbbb !important;
+}
+
+body.dark-mode ::-ms-input-placeholder {
+  color: #bbbbbb !important;
+}
+
+body.dark-mode .form-control::placeholder,
+body.dark-mode .form-select::placeholder,
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder,
+body.dark-mode select::placeholder {
+  color: #bbbbbb !important;
+}
+
+/* Ensure all form controls have proper text color */
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  color: #e0e0e0;
+}
+
+/* Info and placeholder texts */
+body.dark-mode .form-text,
+body.dark-mode small.text-muted,
+body.dark-mode .text-muted {
+  color: #bbbbbb !important;
+}
+
+/* Fix for ticket view page specific elements */
+body.dark-mode .card-body strong {
+  color: #ffffff;
+}
+
+body.dark-mode .ticket-details p,
+body.dark-mode .comments-container p {
+  color: #e0e0e0;
+}
+
+/* Admin dashboard search input */
+body.dark-mode #ticketSearch {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-mode #ticketSearch::placeholder {
+  color: #bbbbbb !important;
+}
+
+/* Dropdowns */
+body.dark-mode .dropdown-menu {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .dropdown-item {
+  color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-item:hover, 
+body.dark-mode .dropdown-item:focus {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+/* Buttons */
+body.dark-mode .btn {
+  color: #ffffff;
+}
+
+body.dark-mode .btn-primary,
+body.dark-mode .btn-success,
+body.dark-mode .btn-info,
+body.dark-mode .btn-warning,
+body.dark-mode .btn-danger {
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #3a3a3a;
+  border-color: #444;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-outline-secondary {
+  color: #e0e0e0;
+  border-color: #666;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+  background-color: #444;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Alerts */
+body.dark-mode .alert-info {
+  background-color: #193c47;
+  border-color: #0f5672;
+  color: #9cdce7;
+}
+
+body.dark-mode .alert-danger {
+  background-color: #4a1c1c;
+  border-color: #6e2121;
+  color: #ffb3b3;
+}
+
+body.dark-mode .alert-success {
+  background-color: #1e3b1e;
+  border-color: #2c572c;
+  color: #a7d8a7;
+}
+
+/* Comments */
+body.dark-mode .comment {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode .comment:hover {
+  background-color: #333;
+}
+
+/* Footer */
+body.dark-mode .footer {
+  background-color: #1e1e1e !important;
+  color: #bbb;
+  border-top: 1px solid #333;
+}
+
+/* Toast notifications */
+body.dark-mode .toast {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+body.dark-mode .toast-header {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-bottom-color: #333;
+}
+
+/* History items */
+body.dark-mode .history-item {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .history-item:hover {
+  background-color: #252525;
+}
+
+/* Jumbotron */
+body.dark-mode .jumbotron {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+/* Modal */
+body.dark-mode .modal-content {
+  background-color: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark-mode .modal-header {
+  border-bottom-color: #333;
+}
+
+body.dark-mode .modal-footer {
+  border-top-color: #333;
+}
+
+/* Links in dark mode */
+body.dark-mode a {
+  color: #6ea8fe;
+}
+
+body.dark-mode a:hover {
+  color: #9ec5fe;
+}
+
+/* Dark mode toggle switch styling */
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  margin: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "☀️";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #2196F3;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+  content: "🌙";
+}
+
+/* Text that shows next to the toggle */
+.toggle-text {
+  margin-left: 8px;
+  font-size: 14px;
+  user-select: none;
+}
+
+body.dark-mode .toggle-text {
+  color: #e0e0e0;
+}
+
+/* Make all status and priority texts brighter in dark mode */
+body.dark-mode .status-text,
+body.dark-mode .priority-text,
+body.dark-mode .category-text {
+  color: #ffffff;
+}
+
+/* Fix for list group items in dark mode */
+body.dark-mode .list-group-item {
+  background-color: #1e1e1e;
+  border-color: #333;
+  color: #e0e0e0;
+}
+
+/* Fix for pre and code blocks in dark mode */
+body.dark-mode pre,
+body.dark-mode code {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
