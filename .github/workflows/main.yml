@@ -23,6 +23,7 @@ jobs:
         
     - name: Reload PM2
       run: |
+        cd /var/www/HelpdeskEksamen
         pm2 reload HelpdeskEksamen
         echo "Reload of PM2 completed successfully at $(date)"
         
