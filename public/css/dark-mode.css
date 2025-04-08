@@ -64,6 +64,28 @@ body.dark-mode .card.text-white {
   color: #ffffff !important; /* Ensure white text is truly white */
 }
 
+/* Ensure all text in card bodies is white/visible in dark mode */
+body.dark-mode .card-body strong,
+body.dark-mode .card-body .mb-3,
+body.dark-mode .card-body p,
+body.dark-mode .comments-container p,
+body.dark-mode .card-header h4,
+body.dark-mode .card-header h5,
+body.dark-mode .card-body div,
+body.dark-mode .card-body label {
+  color: #e0e0e0 !important;
+}
+
+/* Make strong text brighter for better visibility */
+body.dark-mode .card-body strong {
+  color: #ffffff !important;
+}
+
+/* Fix specifically for the ticket view page */
+body.dark-mode .card-header h4 {
+  color: #ffffff !important;
+}
+
 /* Text colors - making dark grays lighter */
 body.dark-mode .text-muted {
   color: #b0b0b0 !important;
@@ -155,6 +177,53 @@ body.dark-mode .table a {
 
 body.dark-mode .table a:hover {
   color: #9ec5fe;
+}
+
+/* Table button styling in dark mode */
+body.dark-mode .table .btn-info {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+  color: #000 !important;
+  font-weight: bold;
+}
+
+body.dark-mode .table .btn-info:hover {
+  background-color: #31d2f2;
+  border-color: #25cff2;
+  color: #000 !important;
+}
+
+body.dark-mode .table .btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #000 !important;
+  font-weight: bold;
+}
+
+body.dark-mode .table .btn-warning:hover {
+  background-color: #ffca2c;
+  border-color: #ffc720;
+  color: #000 !important;
+}
+
+/* Fix for the "Rediger henvendelse" button specifically */
+body.dark-mode .btn-warning,
+body.dark-mode a.btn-warning {
+  color: #000 !important;
+}
+
+body.dark-mode .btn-warning:hover,
+body.dark-mode a.btn-warning:hover {
+  color: #000 !important;
+}
+
+/* Style for truncated ticket titles */
+body.dark-mode .table td.ticket-title {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #e0e0e0 !important;
 }
 
 /* Status badges - adjusted for dark mode but still colorful */

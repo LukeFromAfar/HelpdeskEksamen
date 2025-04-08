@@ -156,7 +156,7 @@
               <% tickets.forEach(ticket => { %>
                 <tr class="ticket-row" data-id="<%= ticket._id %>">
                   <td><%= ticket._id %></td>
-                  <td><%= ticket.title %></td>
+                  <td class="ticket-title" title="<%= ticket.title %>"><%= ticket.title %></td>
                   <td><%= ticket.user ? ticket.user.name : 'Ukjent' %></td>
                   <td><%= ticket.category %></td>
                   <td>

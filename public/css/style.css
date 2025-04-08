@@ -15,6 +15,33 @@ body {
   flex: 1;
 }
 
+/* Button styling in tables */
+.table .btn-info {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+  color: #000;
+  font-weight: bold;
+}
+
+.table .btn-info:hover {
+  background-color: #31d2f2;
+  border-color: #25cff2;
+  color: #000;
+}
+
+.table .btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #000;
+  font-weight: bold;
+}
+
+.table .btn-warning:hover {
+  background-color: #ffca2c;
+  border-color: #ffc720;
+  color: #000;
+}
+
 /* Navbar Styles */
 .navbar-brand {
   font-weight: bold;
@@ -63,6 +90,19 @@ body {
 
 .ticket-row:hover {
   background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Truncate long ticket titles in tables */
+.table td.ticket-title {
+  max-width: 200px; /* Adjust as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Add 'title' attribute to see full text on hover */
+.table td.ticket-title:hover {
+  position: relative;
 }
 
 /* Ticket Status Colors and Badges */
@@ -175,6 +215,14 @@ body {
 .filter-section .form-select:focus {
   border-color: #80bdff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Ticket view page - ensure text is white/visible */
+.card-body strong,
+.card-body .mb-3,
+.card-body p,
+.comments-container p {
+  color: inherit;
 }
 
 /* Responsive Adjustments */
