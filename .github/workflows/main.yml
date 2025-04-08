@@ -19,10 +19,12 @@ jobs:
       run: |
         cd /var/www/HelpdeskEksamen
         git pull origin main
+        echo "Pull latest changes completed successfully at $(date)"
         
     - name: Reload PM2
       run: |
-        pm2 reload HelpdeskEksamen
+        sudo pm2 reload HelpdeskEksamen
+        echo "Reload of PM2 completed successfully at $(date)"
         
     - name: Verify deployment
       run: |
