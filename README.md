@@ -9,6 +9,8 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - Ticket creation and management
 - Real-time notifications via Socket.IO
 - Responsive design for desktop and mobile
+- Dark mode support
+- Comprehensive security features
 
 ## Tech Stack
 
@@ -57,6 +59,13 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - **Rate Limiting**: Protection against brute force attacks
 - **Route Protection**: Role-based middleware
 - **Input Validation**: Server-side validation of form inputs
+- **Helmet Security Headers**: Protection against various common web vulnerabilities
+- **Content Security Policy (CSP)**: Controls resources the user agent is allowed to load
+- **XSS Protection**: Guards against cross-site scripting attacks
+- **Input Sanitization**: Clean user inputs to prevent injection attacks
+- **CSRF Protection**: Through same-site cookie attributes
+- **Secure HTTP Headers**: Protection against clickjacking, MIME sniffing, etc.
+- **Hidden Server Information**: Removes X-Powered-By header
 
 ## Socket.IO Events
 
@@ -85,6 +94,7 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - status: String (enum: 'Åpen', 'Under arbeid', 'Løst', default: 'Åpen')
 - priority: String (enum: 'Lav', 'Medium', 'Høy', default: 'Medium')
 - comments: Array of Comment subdocuments
+- history: Array of History subdocuments
 - createdAt: Date
 - updatedAt: Date
 
@@ -92,6 +102,20 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - user: ObjectId (reference to User model)
 - text: String (required)
 - createdAt: Date
+
+### History Schema (subdocument in Ticket)
+- action: String (required)
+- user: ObjectId (reference to User model)
+- timestamp: Date
+
+## Recent Security Enhancements
+
+1. **Helmet Implementation**: Added comprehensive HTTP security headers
+2. **Input Sanitization**: Using express-validator to clean user inputs
+3. **XSS Protection**: Additional middleware to prevent cross-site scripting
+4. **Content Security Policy**: Strict rules about what resources can be loaded
+5. **Dark Mode**: Enhanced UI with dark mode toggle for better accessibility
+6. **Real-time Notifications**: Improved socket.io implementation for better user experience
 
 ## Setup Instructions
 
@@ -105,3 +129,7 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 4. Start the application:
    - Development: `npm run dev`
    - Production: `npm start`
+
+## Deployment
+
+This application includes GitHub Actions workflows for CI/CD pipeline, automatically deploying to a self-hosted runner when changes are pushed to the main branch.
