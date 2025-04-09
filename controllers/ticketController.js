@@ -18,7 +18,8 @@ const ticketController = {
         title: 'Mitt dashbord', 
         user: req.user, 
         activeTickets,
-        closedTickets
+        closedTickets,
+        path: req.path // Add current path for navbar highlighting
       });
     } catch (error) {
       console.error('Error fetching user dashboard:', error);
@@ -205,7 +206,8 @@ const ticketController = {
             adminSolved,
             total: activeTickets.length,
             closed: closedTickets.length
-          }
+          },
+          path: req.path // Add current path for navbar highlighting
         });
       } 
       // Special handling for user name field
@@ -298,7 +300,8 @@ const ticketController = {
               adminSolved,
               total: activeTickets.length,
               closed: closedTickets.length
-            }
+            },
+            path: req.path // Add current path for navbar highlighting
           });
         } catch (error) {
           console.error('Error in user.name sorting:', error);
@@ -380,7 +383,8 @@ const ticketController = {
           adminSolved,
           total: activeTickets.length,
           closed: closedTickets.length
-        }
+        },
+        path: req.path // Add current path for navbar highlighting
       });
     } catch (error) {
       console.error('Error fetching admin dashboard:', error);
@@ -395,7 +399,8 @@ const ticketController = {
   createTicketForm: (req, res) => {
     res.render('tickets/create', { 
       title: 'Opprett ny henvendelse', 
-      user: req.user 
+      user: req.user,
+      path: req.path // Add current path for navbar highlighting
     });
   },
   
@@ -452,8 +457,9 @@ const ticketController = {
       }
       
       // Check if user is allowed to view this ticket
-      // Only verify user ownership if the user property exists and is not null
-      if (req.user.role !== 'admin' && 
+      // Allow admin, 1. linje, and 2. linje roles to view all tickets
+      // Regular users can only view their own tickets
+      if (!['admin', '1. linje', '2. linje'].includes(req.user.role) && 
           ticket.user && 
           ticket.user._id && 
           ticket.user._id.toString() !== req.user._id.toString()) {
@@ -466,7 +472,8 @@ const ticketController = {
       res.render('tickets/view', { 
         title: 'Vis henvendelse', 
         user: req.user, 
-        ticket 
+        ticket,
+        path: req.path // Add current path for navbar highlighting
       });
     } catch (error) {
       console.error('Error viewing ticket:', error);
@@ -493,7 +500,8 @@ const ticketController = {
       res.render('tickets/edit', {
         title: 'Rediger henvendelse',
         user: req.user,
-        ticket
+        ticket,
+        path: req.path // Add current path for navbar highlighting
       });
     } catch (error) {
       console.error('Error fetching ticket for edit:', error);
@@ -586,7 +594,10 @@ const ticketController = {
       }
       
       // Check if user is allowed to add comments
-      if (req.user.role !== 'admin' && ticket.user.toString() !== req.user._id.toString()) {
+      // Allow admin, 1. linje, and 2. linje to comment on any ticket
+      // Regular users can only comment on their own tickets
+      if (!['admin', '1. linje', '2. linje'].includes(req.user.role) && 
+          ticket.user.toString() !== req.user._id.toString()) {
         return res.status(403).render('error', { 
           message: 'You are not authorized to comment on this ticket', 
           error: {} 
@@ -601,7 +612,7 @@ const ticketController = {
       
       // Add history entry for comment
       ticket.history.push({
-        action: `Kommentar lagt til av ${req.user.role === 'admin' ? 'administrator' : 'bruker'}`,
+        action: `Kommentar lagt til av ${req.user.role === 'admin' ? 'administrator' : req.user.role === '1. linje' ? '1. linje' : req.user.role === '2. linje' ? '2. linje' : 'bruker'}`,
         user: req.user._id,
         timestamp: new Date()
       });
@@ -611,10 +622,10 @@ const ticketController = {
       await ticket.save();
       
       // Notify users via socket.io
-      if (req.user.role === 'admin') {
+      if (['admin', '1. linje', '2. linje'].includes(req.user.role)) {
         req.io.to(`user_${ticket.user}`).emit('new-comment', {
           ticketId: ticket._id,
-          message: 'En admin har kommentert på henvendelsen din'
+          message: `En ${req.user.role} har kommentert på henvendelsen din`
         });
       } else {
         req.io.to('admin_room').emit('new-comment', {

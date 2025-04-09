@@ -48,6 +48,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Add path to all rendered views
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tickets', ticketRoutes);

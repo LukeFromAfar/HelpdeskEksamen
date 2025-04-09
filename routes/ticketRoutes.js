@@ -12,8 +12,8 @@ router.use(auth);
 // User dashboard
 router.get('/mydashboard', ticketController.userDashboard);
 
-// Admin dashboard - only accessible by admins
-router.get('/admin', roleCheck('admin'), ticketController.adminDashboard);
+// Admin dashboard - accessible by admins, 1. linje and 2. linje
+router.get('/admin', roleCheck(['admin', '1. linje', '2. linje']), ticketController.adminDashboard);
 
 // Create new ticket
 router.get('/create', ticketController.createTicketForm);
@@ -22,9 +22,9 @@ router.post('/create', apiLimiter, sanitizeTicket, ticketController.createTicket
 // View ticket
 router.get('/view/:id', sanitizeParams, ticketController.viewTicket);
 
-// Edit ticket - only accessible by admins
-router.get('/edit/:id', roleCheck('admin'), sanitizeParams, ticketController.editTicketForm);
-router.post('/update/:id', roleCheck('admin'), apiLimiter, sanitizeParams, sanitizeTicket, ticketController.updateTicket);
+// Edit ticket - accessible by admins, 1. linje and 2. linje
+router.get('/edit/:id', roleCheck(['admin', '1. linje', '2. linje']), sanitizeParams, ticketController.editTicketForm);
+router.post('/update/:id', roleCheck(['admin', '1. linje', '2. linje']), sanitizeParams, apiLimiter, sanitizeTicket, ticketController.updateTicket);
 
 // Add comment to ticket
 router.post('/comment/:id', apiLimiter, sanitizeParams, sanitizeComment, ticketController.addComment);
