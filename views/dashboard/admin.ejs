@@ -198,7 +198,13 @@
                     <%= ticket.status === 'Lukket' ? 'data-closed="true"' : '' %>>
                   <td><%= ticket._id %></td>
                   <td class="ticket-title" title="<%= ticket.title %>"><%= ticket.title %></td>
-                  <td><%= ticket.user ? ticket.user.name : 'Ukjent' %></td>
+                  <td>
+                    <% if (ticket.user && ticket.user.name) { %>
+                      <%= ticket.user.name %>
+                    <% } else { %>
+                      <span class="text-muted">[Slettet bruker]</span>
+                    <% } %>
+                  </td>
                   <td><%= ticket.category %></td>
                   <td>
                     <span class="badge bg-<%= 

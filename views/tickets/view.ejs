@@ -39,7 +39,12 @@
             <% } %>
           </div>
           <div class="mb-3">
-            <strong>Opprettet av:</strong> <%= ticket.user.name %>
+            <strong>Opprettet av:</strong> 
+            <% if (ticket.user && ticket.user.name) { %>
+              <%= ticket.user.name %>
+            <% } else { %>
+              <span class="text-muted">[Slettet bruker]</span>
+            <% } %>
           </div>
           <div class="mb-3">
             <strong>Opprettet:</strong> <%= new Date(ticket.createdAt).toLocaleString('no-NO') %>
@@ -78,9 +83,13 @@
                 <div class="comment p-3 mb-3 border rounded">
                   <div class="d-flex justify-content-between">
                     <div>
-                      <strong><%= comment.user.name %></strong>
-                      <% if (comment.user.role === 'admin') { %>
-                        <span class="badge bg-primary ms-2">Admin</span>
+                      <% if (comment.user && comment.user.name) { %>
+                        <strong><%= comment.user.name %></strong>
+                        <% if (comment.user.role === 'admin') { %>
+                          <span class="badge bg-primary ms-2">Admin</span>
+                        <% } %>
+                      <% } else { %>
+                        <strong class="text-muted">[Slettet bruker]</strong>
                       <% } %>
                     </div>
                     <small><%= new Date(comment.createdAt).toLocaleString('no-NO') %></small>
@@ -120,12 +129,16 @@
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
                         <p class="mb-0"><%= item.action %></p>
-                        <small class="text-muted">
-                          <%= item.user ? item.user.name : 'System' %>
-                          <% if (item.user && item.user.role === 'admin') { %>
-                            <span class="badge bg-primary">Admin</span>
-                          <% } %>
-                        </small>
+                        <% if (item.user && item.user.name) { %>
+                          <small class="text-muted">
+                            <%= item.user.name %>
+                            <% if (item.user.role === 'admin') { %>
+                              <span class="badge bg-primary">Admin</span>
+                            <% } %>
+                          </small>
+                        <% } else { %>
+                          <small class="text-muted">[Slettet bruker]</small>
+                        <% } %>
                       </div>
                       <small><%= new Date(item.timestamp).toLocaleString('no-NO') %></small>
                     </div>

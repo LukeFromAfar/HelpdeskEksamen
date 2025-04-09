@@ -452,7 +452,11 @@ const ticketController = {
       }
       
       // Check if user is allowed to view this ticket
-      if (req.user.role !== 'admin' && ticket.user._id.toString() !== req.user._id.toString()) {
+      // Only verify user ownership if the user property exists and is not null
+      if (req.user.role !== 'admin' && 
+          ticket.user && 
+          ticket.user._id && 
+          ticket.user._id.toString() !== req.user._id.toString()) {
         return res.status(403).render('error', { 
           message: 'You are not authorized to view this ticket', 
           error: {} 
