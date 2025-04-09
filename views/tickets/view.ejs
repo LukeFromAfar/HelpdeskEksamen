@@ -56,8 +56,87 @@
             <strong>Beskrivelse:</strong>
             <p class="mt-2"><%= ticket.description %></p>
           </div>
+
+          <% if (ticket.status === 'Løst') { %>
+            <div class="mb-3">
+              <strong>Tilbakemelding status:</strong> 
+              <% if (ticket.hasFeedback) { %>
+                <span class="badge bg-success">Tilbakemelding mottatt</span>
+              <% } else { %>
+                <span class="badge bg-warning">Venter på tilbakemelding</span>
+              <% } %>
+            </div>
+          <% } %>
           
-          <% if (user.role === 'admin') { %>
+          <% if (ticket.status === 'Løst' && ticket.user && user && 
+                 ticket.user._id && ticket.user._id.toString() === user._id.toString() && 
+                 !ticket.hasFeedback) { %>
+            <!-- Feedback form for solved tickets -->
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5>Gi tilbakemelding</h5>
+              </div>
+              <div class="card-body">
+                <form action="/api/tickets/feedback/<%= ticket._id %>" method="POST">
+                  <div class="mb-3">
+                    <label class="form-label">Hvor fornøyd er du med løsningen?</label>
+                    <div class="rating-stars mb-2">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rating" id="rating1" value="1" required>
+                        <label class="form-check-label" for="rating1">1 ★</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rating" id="rating2" value="2">
+                        <label class="form-check-label" for="rating2">2 ★</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rating" id="rating3" value="3">
+                        <label class="form-check-label" for="rating3">3 ★</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rating" id="rating4" value="4">
+                        <label class="form-check-label" for="rating4">4 ★</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rating" id="rating5" value="5">
+                        <label class="form-check-label" for="rating5">5 ★</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="feedbackComment" class="form-label">Kommentar (valgfritt)</label>
+                    <textarea class="form-control" id="feedbackComment" name="comment" rows="2"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Send tilbakemelding</button>
+                </form>
+              </div>
+            </div>
+          <% } else if (ticket.hasFeedback && ticket.feedback && ticket.feedback.rating) { %>
+            <!-- Show existing feedback -->
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5>Tilbakemelding</h5>
+              </div>
+              <div class="card-body">
+                <p>
+                  <strong>Vurdering:</strong> 
+                  <% for (let i = 0; i < ticket.feedback.rating; i++) { %>
+                    <span class="text-warning">★</span>
+                  <% } %>
+                  <% for (let i = ticket.feedback.rating; i < 5; i++) { %>
+                    <span class="text-muted">★</span>
+                  <% } %>
+                  (<%= ticket.feedback.rating %>/5)
+                </p>
+                <% if (ticket.feedback.comment) { %>
+                  <p><strong>Kommentar:</strong> <%= ticket.feedback.comment %></p>
+                <% } %>
+                <p class="text-muted small">Gitt <%= new Date(ticket.feedback.createdAt).toLocaleString('no-NO') %></p>
+              </div>
+            </div>
+          <% } %>
+          
+          <% if ((user.role === 'admin' || user.role === '1. linje' || user.role === '2. linje')) { %>
             <div class="mt-4">
               <a href="/api/tickets/edit/<%= ticket._id %>" class="btn btn-warning">Rediger henvendelse</a>
               <a href="/api/tickets/admin" class="btn btn-secondary">Tilbake til dashbord</a>

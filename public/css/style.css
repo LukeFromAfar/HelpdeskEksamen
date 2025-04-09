@@ -72,6 +72,62 @@ body {
   outline: none;
 }
 
+/* Custom navbar collapse point */
+@media (max-width: 1200px) { /* Using 1200px as our collapse point */
+  /* Override Bootstrap's default behavior */
+  .navbar-expand-lg .navbar-collapse {
+    display: none !important;
+  }
+  .navbar-expand-lg .navbar-toggler {
+    display: block !important;
+  }
+  .navbar-expand-lg .navbar-collapse.show {
+    display: block !important;
+  }
+  
+  /* Keep items organized in hamburger menu mode */
+  .navbar-nav {
+    flex-direction: column !important;
+    width: 100%;
+  }
+  
+  /* Keep proper spacing between navbar items */
+  .navbar-nav .nav-item {
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Make sure dropdown menus properly align */
+  .navbar-nav .dropdown-menu {
+    position: static !important;
+    float: none !important;
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Space the dark mode toggle correctly */
+  .dark-mode-toggle {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    justify-content: flex-start;
+  }
+  
+  /* Force all Bootstrap's responsive behaviors to be consistent across all screen sizes in hamburger mode */
+  .navbar-expand-lg .navbar-nav {
+    flex-direction: column !important;
+  }
+  
+  /* Override any Bootstrap media queries that might affect the navbar between 992-1200px */
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Ensure the collapse has same behavior at all screen sizes below 1200px */
+  .navbar-expand-lg .navbar-collapse {
+    flex-basis: 100%;
+  }
+}
+
 /* Dashboard Cards */
 .card {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -280,6 +336,25 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+}
+
+/* Feedback status badges */
+.badge.bg-info[title="Vennligst gi din tilbakemelding"] {
+  cursor: help;
+}
+
+.rating-stars .form-check-label {
+  color: #ffc107;
+  font-size: 1.2rem;
+}
+
+/* Feedback stars styling */
+.rating-stars .form-check-inline {
+  margin-right: 1.5rem;
+}
+
+.text-warning {
+  color: #ffc107 !important;
 }
 
 /* Responsive Adjustments */

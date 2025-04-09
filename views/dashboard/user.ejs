@@ -44,6 +44,9 @@
                     ticket.status === 'Under arbeid' ? 'warning' : 
                     ticket.status === 'Løst' ? 'success' : 'secondary' 
                   %>"><%= ticket.status %></span>
+                  <% if (ticket.status === 'Løst' && !ticket.hasFeedback) { %>
+                    <span class="badge bg-info ms-1" title="Vennligst gi din tilbakemelding">Tilbakemelding ønskes</span>
+                  <% } %>
                 </td>
                 <td>
                   <span class="badge bg-<%= 

@@ -90,6 +90,10 @@ const TicketSchema = new mongoose.Schema({
   comments: [CommentSchema],
   history: [HistorySchema],
   feedback: FeedbackSchema,
+  hasFeedback: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now

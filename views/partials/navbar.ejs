@@ -31,12 +31,7 @@
             <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Opprett ny henvendelse') ? 'active' : '' %>" href="/api/tickets/create">Opprett henvendelse</a>
           </li>
         <% } %>
-        <li class="nav-item">
-          <a class="nav-link <%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link <%= currentPath === '/manual' ? 'active' : '' %>" href="/manual">Brukerveiledning</a>
-        </li>
+        <!-- Removed FAQ and Brukerveiledning links from here -->
       </ul>
       <div class="dark-mode-toggle">
         <label class="toggle-switch">

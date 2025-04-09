@@ -642,7 +642,120 @@ const ticketController = {
         error: {} 
       });
     }
-  }
+  },
+  
+  // Add feedback to ticket
+  addFeedback: async (req, res) => {
+    try {
+      console.log('Feedback submission started for ticket ID:', req.params.id);
+      console.log('Feedback data received:', req.body);
+      
+      const { rating, comment } = req.body;
+      const numericRating = parseInt(rating, 10);
+      
+      console.log('Parsed rating:', numericRating, 'Comment:', comment);
+      
+      if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+        console.log('Invalid rating value:', numericRating);
+        return res.status(400).render('error', { 
+          message: 'Ugyldig vurdering. Må være mellom 1 og 5.', 
+          error: {} 
+        });
+      }
+      
+      console.log('Finding ticket with ID:', req.params.id);
+      const ticket = await Ticket.findById(req.params.id)
+        .populate('user', 'name email');
+      
+      if (!ticket) {
+        console.log('Ticket not found with ID:', req.params.id);
+        return res.status(404).render('error', { 
+          message: 'Henvendelse ikke funnet', 
+          error: {} 
+        });
+      }
+      
+      console.log('Ticket found:', ticket._id, 'Status:', ticket.status);
+      console.log('Ticket owner:', ticket.user ? ticket.user._id : 'No user');
+      console.log('Current user:', req.user._id);
+      
+      // Check if the current user is the ticket owner
+      if (!ticket.user || !ticket.user._id || ticket.user._id.toString() !== req.user._id.toString()) {
+        console.log('Authorization failed - User is not ticket owner');
+        console.log('Ticket user ID:', ticket.user ? ticket.user._id.toString() : 'undefined');
+        console.log('Current user ID:', req.user._id.toString());
+        
+        return res.status(403).render('error', { 
+          message: 'Du har ikke tillatelse til å gi tilbakemelding på denne henvendelsen', 
+          error: {} 
+        });
+      }
+      
+      // Check if ticket status is "Løst"
+      if (ticket.status !== 'Løst') {
+        console.log('Status check failed - Ticket status is not "Løst":', ticket.status);
+        return res.status(400).render('error', { 
+          message: 'Du kan kun gi tilbakemelding på løste henvendelser', 
+          error: {} 
+        });
+      }
+      
+      // Check if feedback already exists
+      console.log('Current feedback on ticket:', ticket.feedback);
+      if (ticket.feedback && ticket.feedback.rating) {
+        console.log('Feedback already exists with rating:', ticket.feedback.rating);
+        return res.status(400).render('error', { 
+          message: 'Du har allerede gitt tilbakemelding på denne henvendelsen', 
+          error: {} 
+        });
+      }
+      
+      console.log('Creating new feedback with rating:', numericRating);
+      
+      // Add feedback
+      ticket.feedback = {
+        rating: numericRating,
+        comment: comment || '',
+        user: req.user._id,
+        createdAt: new Date()
+      };
+      
+      // Add history entry for feedback
+      ticket.history.push({
+        action: `Bruker ga tilbakemelding med ${numericRating} stjerne${numericRating !== 1 ? 'r' : ''}`,
+        user: req.user._id,
+        timestamp: new Date()
+      });
+      
+      // Add a boolean flag to indicate feedback has been given
+      ticket.hasFeedback = true;
+      
+      console.log('Feedback object created:', ticket.feedback);
+      console.log('Saving ticket...');
+      
+      // Mark the updated time
+      ticket.updatedAt = new Date();
+      
+      // Save the ticket
+      await ticket.save();
+      
+      console.log('Ticket saved successfully with feedback');
+      
+      // Redirect back to the ticket view
+      res.redirect(`/api/tickets/view/${req.params.id}`);
+    } catch (error) {
+      console.error('Error in addFeedback method:', error);
+      console.error('Stack trace:', error.stack);
+      res.status(500).render('error', { 
+        message: `Feil ved registrering av tilbakemelding: ${error.message}`, 
+        error: {
+          stack: error.stack,
+          details: JSON.stringify(error, Object.getOwnPropertyNames(error))
+        } 
+      });
+    }
+  },
+
 };
 
 module.exports = ticketController;

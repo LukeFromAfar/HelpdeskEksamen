@@ -57,6 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
         location.reload();
       }
     });
+    
+    // Listen for ticket feedback
+    socket.on('ticket-feedback', (data) => {
+      const stars = '★'.repeat(data.rating);
+      createToast('Ny tilbakemelding', 
+        `${data.message} (${stars})`, 
+        data.ticketId,
+        false, // Do not auto close
+        true   // Add refresh button
+      );
+      
+      // Auto-refresh admin dashboard if active
+      if (window.location.pathname === '/api/tickets/admin') {
+        location.reload();
+      }
+    });
   }
 });
 
