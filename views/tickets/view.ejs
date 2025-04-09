@@ -28,6 +28,17 @@
             %>"><%= ticket.priority %></span>
           </div>
           <div class="mb-3">
+            <strong>Tildelt til:</strong> 
+            <% if (ticket.assignedTo) { %>
+              <span class="badge bg-<%= 
+                ticket.assignedTo === '1. linje' ? 'primary' : 
+                ticket.assignedTo === '2. linje' ? 'info' : 'dark' 
+              %>"><%= ticket.assignedTo %></span>
+            <% } else { %>
+              <span class="badge bg-secondary">Ikke tildelt</span>
+            <% } %>
+          </div>
+          <div class="mb-3">
             <strong>Opprettet av:</strong> <%= ticket.user.name %>
           </div>
           <div class="mb-3">

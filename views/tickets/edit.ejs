@@ -45,6 +45,16 @@
                 <option value="Høy" <%= ticket.priority === 'Høy' ? 'selected' : '' %>>Høy</option>
               </select>
             </div>
+            <div class="mb-3">
+              <label for="assignedTo" class="form-label">Tildel til</label>
+              <select class="form-select" id="assignedTo" name="assignedTo">
+                <option value="" <%= !ticket.assignedTo ? 'selected' : '' %>>Ikke tildelt</option>
+                <option value="1. linje" <%= ticket.assignedTo === '1. linje' ? 'selected' : '' %>>1. linje</option>
+                <option value="2. linje" <%= ticket.assignedTo === '2. linje' ? 'selected' : '' %>>2. linje</option>
+                <option value="admin" <%= ticket.assignedTo === 'admin' ? 'selected' : '' %>>Admin</option>
+              </select>
+              <small class="form-text text-muted">Tildel henvendelsen til en bestemt rolle for håndtering.</small>
+            </div>
             <button type="submit" class="btn btn-primary">Oppdater henvendelse</button>
             <a href="/api/tickets/view/<%= ticket._id %>" class="btn btn-secondary">Avbryt</a>
           </form>

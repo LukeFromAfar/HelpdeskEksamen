@@ -51,6 +51,35 @@
         </div>
       </div>
     </div>
+    
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <h5 class="card-title">Rolletildelinger</h5>
+            <div>
+              <span class="badge bg-primary me-1">1. linje: <%= stats.firstLineCount %></span>
+              <span class="badge bg-info me-1">2. linje: <%= stats.secondLineCount %></span>
+              <span class="badge bg-dark me-1">Admin: <%= stats.adminAssignedCount %></span>
+              <span class="badge bg-secondary">Ikke tildelt: <%= stats.unassignedCount %></span>
+            </div>
+          </div>
+          <div class="chart-container" style="position: relative; height: 250px;">
+            <canvas id="assignmentChart"></canvas>
+          </div>
+          <div class="d-flex justify-content-between mt-2">
+            <div class="text-center">
+              <strong>Løste henvendelser per rolle:</strong>
+              <div class="mt-1">
+                <span class="badge bg-success me-1">1. linje: <%= stats.firstLineSolved %></span>
+                <span class="badge bg-success me-1">2. linje: <%= stats.secondLineSolved %></span>
+                <span class="badge bg-success">Admin: <%= stats.adminSolved %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <!-- Ticket filter -->
@@ -70,6 +99,7 @@
               <i class="bi bi-x"></i> Tøm
             </button>
           </div>
+          
           <small class="form-text text-muted">Søk på tittel, brukernavn eller ID</small>
         </div>
         <div class="col-md-8">
@@ -103,6 +133,17 @@
               </select>
             </div>
             <div class="col-md-3">
+              <select class="form-select" id="assignedToFilter">
+                <option value="" <%= !assignedToFilter ? 'selected' : '' %>>Alle tildelinger</option>
+                <option value="1. linje" <%= assignedToFilter === '1. linje' ? 'selected' : '' %>>1. linje</option>
+                <option value="2. linje" <%= assignedToFilter === '2. linje' ? 'selected' : '' %>>2. linje</option>
+                <option value="admin" <%= assignedToFilter === 'admin' ? 'selected' : '' %>>Admin</option>
+                <option value="none" <%= assignedToFilter === 'none' ? 'selected' : '' %>>Ikke tildelt</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
               <select class="form-select" id="sortSelector">
                 <option value="createdAt:desc" <%= sortField === 'createdAt' && sortOrder === 'desc' ? 'selected' : '' %>>Nyeste først</option>
                 <option value="createdAt:asc" <%= sortField === 'createdAt' && sortOrder === 'asc' ? 'selected' : '' %>>Eldste først</option>
@@ -144,6 +185,7 @@
                 <th>Kategori</th>
                 <th>Status</th>
                 <th>Prioritet</th>
+                <th>Tildelt</th>
                 <th>Opprettet</th>
                 <th>Sist oppdatert</th>
                 <th>Handlinger</th>
@@ -171,6 +213,16 @@
                       ticket.priority === 'Medium' ? 'warning' : 'info' 
                     %>"><%= ticket.priority %></span>
                   </td>
+                  <td>
+                    <% if (ticket.assignedTo) { %>
+                      <span class="badge bg-<%= 
+                        ticket.assignedTo === '1. linje' ? 'primary' : 
+                        ticket.assignedTo === '2. linje' ? 'info' : 'dark' 
+                      %>"><%= ticket.assignedTo %></span>
+                    <% } else { %>
+                      <span class="badge bg-secondary">Ikke tildelt</span>
+                    <% } %>
+                  </td>
                   <td><%= new Date(ticket.createdAt).toLocaleString('no-NO') %></td>
                   <td><%= new Date(ticket.updatedAt).toLocaleString('no-NO') %></td>
                   <td>
@@ -190,23 +242,23 @@
           <nav aria-label="Sidenavigasjon">
             <ul class="pagination mb-0">
               <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=1&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Første</a>
+                <a class="page-link" href="/api/tickets/admin?page=1&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= assignedToFilter ? '&assignedTo=' + assignedToFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Første</a>
               </li>
               <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage - 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Forrige</a>
+                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage - 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= assignedToFilter ? '&assignedTo=' + assignedToFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Forrige</a>
               </li>
               
               <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
                 <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                  <a class="page-link" href="/api/tickets/admin?page=<%= i %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>"><%= i %></a>
+                  <a class="page-link" href="/api/tickets/admin?page=<%= i %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= assignedToFilter ? '&assignedTo=' + assignedToFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>"><%= i %></a>
                 </li>
               <% } %>
               
               <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage + 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Neste</a>
+                <a class="page-link" href="/api/tickets/admin?page=<%= currentPage + 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= assignedToFilter ? '&assignedTo=' + assignedToFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Neste</a>
               </li>
               <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
-                <a class="page-link" href="/api/tickets/admin?page=<%= totalPages %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Siste</a>
+                <a class="page-link" href="/api/tickets/admin?page=<%= totalPages %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= statusFilter ? '&status=' + statusFilter : '' %><%= priorityFilter ? '&priority=' + priorityFilter : '' %><%= categoryFilter ? '&category=' + categoryFilter : '' %><%= assignedToFilter ? '&assignedTo=' + assignedToFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Siste</a>
               </li>
             </ul>
           </nav>

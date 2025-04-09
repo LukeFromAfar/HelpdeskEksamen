@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Get chart contexts
   const statusChartContext = document.getElementById('statusChart').getContext('2d');
   const priorityChartContext = document.getElementById('priorityChart').getContext('2d');
+  const assignmentChartContext = document.getElementById('assignmentChart').getContext('2d');
   
   // Get stats data from the page
   const stats = JSON.parse(document.getElementById('chartStatsData').textContent);
@@ -14,7 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     closed: '#6c757d',     // Gray (secondary) - not used in chart
     high: '#dc3545',       // Red (danger)
     medium: '#ffc107',     // Yellow (warning)
-    low: '#0dcaf0'         // Light blue (info)
+    low: '#0dcaf0',        // Light blue (info)
+    firstLine: '#0d6efd',  // Blue (primary)
+    secondLine: '#0dcaf0', // Light blue (info)
+    admin: '#212529',      // Dark
+    unassigned: '#6c757d'  // Gray (secondary)
   };
   
   // Create Status Distribution chart - excluding closed tickets
@@ -108,6 +113,52 @@ document.addEventListener('DOMContentLoaded', () => {
       cutout: '60%'
     }
   });
+
+  // Create Assignment Distribution chart
+  const assignmentChart = new Chart(assignmentChartContext, {
+    type: 'doughnut',
+    data: {
+      labels: ['1. linje', '2. linje', 'Admin', 'Ikke tildelt'],
+      datasets: [{
+        data: [stats.firstLineCount, stats.secondLineCount, stats.adminAssignedCount, stats.unassignedCount],
+        backgroundColor: [colors.firstLine, colors.secondLine, colors.admin, colors.unassigned],
+        borderColor: 'rgba(255, 255, 255, 0.5)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 15,
+            padding: 15
+          }
+        },
+        title: {
+          display: true,
+          text: 'Tildeling fordeling (aktive henvendelser)',
+          font: {
+            size: 16
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const label = context.label || '';
+              const value = context.raw || 0;
+              const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+              const percentage = Math.round((value / total) * 100);
+              return `${label}: ${value} (${percentage}%)`;
+            }
+          }
+        }
+      },
+      cutout: '60%'
+    }
+  });
   
   // Update charts when dark mode changes to adjust text colors
   const darkModeToggle = document.getElementById('darkModeToggle');
@@ -116,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isDarkMode = darkModeToggle.checked;
       const textColor = isDarkMode ? '#e0e0e0' : '#333333';
       
-      [statusChart, priorityChart].forEach(chart => {
+      [statusChart, priorityChart, assignmentChart].forEach(chart => {
         chart.options.plugins.title.color = textColor;
         chart.options.plugins.legend.labels.color = textColor;
         chart.update();
@@ -125,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize chart text colors based on current mode
     if (document.body.classList.contains('dark-mode')) {
-      [statusChart, priorityChart].forEach(chart => {
+      [statusChart, priorityChart, assignmentChart].forEach(chart => {
         chart.options.plugins.title.color = '#e0e0e0';
         chart.options.plugins.legend.labels.color = '#e0e0e0';
         chart.update();

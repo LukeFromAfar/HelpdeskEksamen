@@ -32,6 +32,27 @@ const HistorySchema = new mongoose.Schema({
   }
 });
 
+const FeedbackSchema = new mongoose.Schema({
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5
+  },
+  comment: {
+    type: String
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
 const TicketSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -43,7 +64,8 @@ const TicketSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: true
+    required: true,
+    enum: ['Hardware', 'Software', 'Nettverk', 'Konto', 'Annet']
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -60,8 +82,14 @@ const TicketSchema = new mongoose.Schema({
     enum: ['Lav', 'Medium', 'Høy'],
     default: 'Medium'
   },
+  assignedTo: {
+    type: String,
+    enum: ['1. linje', '2. linje', 'admin', ''],
+    default: ''
+  },
   comments: [CommentSchema],
   history: [HistorySchema],
+  feedback: FeedbackSchema,
   createdAt: {
     type: Date,
     default: Date.now

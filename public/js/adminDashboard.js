@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusFilter = document.getElementById('statusFilter');
   const categoryFilter = document.getElementById('categoryFilter');
   const priorityFilter = document.getElementById('priorityFilter');
+  const assignedToFilter = document.getElementById('assignedToFilter'); // New filter
   const sortSelector = document.getElementById('sortSelector');
   const clearSearchBtn = document.getElementById('clearSearch');
   const searchBtn = document.getElementById('searchBtn'); // New search button
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   statusFilter.addEventListener('change', () => applyServerFilters());
   categoryFilter.addEventListener('change', () => applyServerFilters());
   priorityFilter.addEventListener('change', () => applyServerFilters());
+  assignedToFilter.addEventListener('change', () => applyServerFilters()); // Add event listener for new filter
   
   // Sort selector event listener
   sortSelector.addEventListener('change', () => {
@@ -80,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const priority = priorityFilter.value;
     if (priority) {
       url += `&priority=${priority}`;
+    }
+    
+    // Add assignedTo filter
+    const assignedTo = assignedToFilter.value;
+    if (assignedTo) {
+      url += `&assignedTo=${assignedTo}`;
     }
     
     // Navigate to filtered results

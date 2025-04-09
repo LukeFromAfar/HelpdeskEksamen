@@ -45,7 +45,8 @@ const ticketController = {
       const statusFilter = req.query.status || '';
       const priorityFilter = req.query.priority || '';
       const categoryFilter = req.query.category || '';
-      const searchQuery = req.query.search || ''; // Make sure this exists
+      const assignedToFilter = req.query.assignedTo || ''; // New filter parameter
+      const searchQuery = req.query.search || '';
       
       // Set up filter conditions
       const filterConditions = {};
@@ -58,6 +59,21 @@ const ticketController = {
       if (categoryFilter) {
         filterConditions.category = categoryFilter;
       }
+
+      // Handle assignedTo filter
+      if (assignedToFilter) {
+        if (assignedToFilter === 'none') {
+          // If filter is 'none', find tickets with no assignedTo or empty assignedTo
+          filterConditions.$or = [
+            { assignedTo: { $exists: false } },
+            { assignedTo: null },
+            { assignedTo: '' }
+          ];
+        } else {
+          // Otherwise, filter by the specific role
+          filterConditions.assignedTo = assignedToFilter;
+        }
+      }
       
       // Add search query handling
       if (searchQuery) {
@@ -69,17 +85,29 @@ const ticketController = {
         const userIds = matchingUsers.map(user => user._id);
         
         // Set up $or conditions for search across multiple fields
-        filterConditions.$or = [
+        const searchConditions = [
           { title: searchRegex },
           { _id: searchQuery.match(/^[0-9a-fA-F]{24}$/) ? searchQuery : null }
         ];
         
         // Add user IDs to search if we found matching users
         if (userIds.length > 0) {
-          filterConditions.$or.push({ user: { $in: userIds } });
+          searchConditions.push({ user: { $in: userIds } });
+        }
+        
+        // If we already have $or conditions (for assignedTo: none), we need to combine them
+        if (filterConditions.$or) {
+          const assignedToConditions = filterConditions.$or;
+          delete filterConditions.$or;
+          filterConditions.$and = [
+            { $or: assignedToConditions },
+            { $or: searchConditions }
+          ];
+        } else {
+          filterConditions.$or = searchConditions;
         }
       }
-      
+
       // Get total count for pagination based on filters
       const totalTickets = await Ticket.countDocuments(filterConditions);
       const totalPages = Math.ceil(totalTickets / limit);
@@ -132,6 +160,20 @@ const ticketController = {
         const mediumPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Medium').length;
         const lowPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Lav').length;
         
+        // Calculate stats for roles
+        const firstLineCount = activeTickets.filter(ticket => ticket.assignedTo === '1. linje').length;
+        const secondLineCount = activeTickets.filter(ticket => ticket.assignedTo === '2. linje').length;
+        const adminAssignedCount = activeTickets.filter(ticket => ticket.assignedTo === 'admin').length;
+        const unassignedCount = activeTickets.filter(ticket => !ticket.assignedTo).length;
+        
+        // Calculate stats for solved tickets by role
+        const firstLineSolved = activeTickets.filter(ticket => 
+          ticket.assignedTo === '1. linje' && ticket.status === 'Løst').length;
+        const secondLineSolved = activeTickets.filter(ticket => 
+          ticket.assignedTo === '2. linje' && ticket.status === 'Løst').length;
+        const adminSolved = activeTickets.filter(ticket => 
+          ticket.assignedTo === 'admin' && ticket.status === 'Løst').length;
+        
         return res.render('dashboard/admin', { 
           title: 'Admin dashbord', 
           user: req.user, 
@@ -144,6 +186,7 @@ const ticketController = {
           statusFilter,
           priorityFilter,
           categoryFilter,
+          assignedToFilter, // Pass the filter value to the template
           search: searchQuery, // Pass search query to template
           stats: {
             openCount,
@@ -152,6 +195,14 @@ const ticketController = {
             highPriorityCount,
             mediumPriorityCount,
             lowPriorityCount,
+            // Add new role stats
+            firstLineCount,
+            secondLineCount,
+            adminAssignedCount,
+            unassignedCount,
+            firstLineSolved,
+            secondLineSolved,
+            adminSolved,
             total: activeTickets.length,
             closed: closedTickets.length
           }
@@ -202,6 +253,20 @@ const ticketController = {
           const mediumPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Medium').length;
           const lowPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Lav').length;
           
+          // Calculate stats for roles
+          const firstLineCount = activeTickets.filter(ticket => ticket.assignedTo === '1. linje').length;
+          const secondLineCount = activeTickets.filter(ticket => ticket.assignedTo === '2. linje').length;
+          const adminAssignedCount = activeTickets.filter(ticket => ticket.assignedTo === 'admin').length;
+          const unassignedCount = activeTickets.filter(ticket => !ticket.assignedTo).length;
+          
+          // Calculate stats for solved tickets by role
+          const firstLineSolved = activeTickets.filter(ticket => 
+            ticket.assignedTo === '1. linje' && ticket.status === 'Løst').length;
+          const secondLineSolved = activeTickets.filter(ticket => 
+            ticket.assignedTo === '2. linje' && ticket.status === 'Løst').length;
+          const adminSolved = activeTickets.filter(ticket => 
+            ticket.assignedTo === 'admin' && ticket.status === 'Løst').length;
+          
           return res.render('dashboard/admin', { 
             title: 'Admin dashbord', 
             user: req.user, 
@@ -214,6 +279,7 @@ const ticketController = {
             statusFilter,
             priorityFilter,
             categoryFilter,
+            assignedToFilter, // Pass the filter value to the template
             search: searchQuery, // Pass search query to template
             stats: {
               openCount,
@@ -222,6 +288,14 @@ const ticketController = {
               highPriorityCount,
               mediumPriorityCount,
               lowPriorityCount,
+              // Add new role stats
+              firstLineCount,
+              secondLineCount,
+              adminAssignedCount,
+              unassignedCount,
+              firstLineSolved,
+              secondLineSolved,
+              adminSolved,
               total: activeTickets.length,
               closed: closedTickets.length
             }
@@ -261,6 +335,20 @@ const ticketController = {
       const mediumPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Medium').length;
       const lowPriorityCount = activeTickets.filter(ticket => ticket.priority === 'Lav').length;
       
+      // Calculate stats for roles
+      const firstLineCount = activeTickets.filter(ticket => ticket.assignedTo === '1. linje').length;
+      const secondLineCount = activeTickets.filter(ticket => ticket.assignedTo === '2. linje').length;
+      const adminAssignedCount = activeTickets.filter(ticket => ticket.assignedTo === 'admin').length;
+      const unassignedCount = activeTickets.filter(ticket => !ticket.assignedTo).length;
+      
+      // Calculate stats for solved tickets by role
+      const firstLineSolved = activeTickets.filter(ticket => 
+        ticket.assignedTo === '1. linje' && ticket.status === 'Løst').length;
+      const secondLineSolved = activeTickets.filter(ticket => 
+        ticket.assignedTo === '2. linje' && ticket.status === 'Løst').length;
+      const adminSolved = activeTickets.filter(ticket => 
+        ticket.assignedTo === 'admin' && ticket.status === 'Løst').length;
+      
       res.render('dashboard/admin', { 
         title: 'Admin dashbord', 
         user: req.user, 
@@ -273,6 +361,7 @@ const ticketController = {
         statusFilter,
         priorityFilter,
         categoryFilter,
+        assignedToFilter, // Pass the filter value to the template
         search: searchQuery, // Pass search query to template
         stats: {
           openCount,
@@ -281,6 +370,14 @@ const ticketController = {
           highPriorityCount,
           mediumPriorityCount,
           lowPriorityCount,
+          // Add new role stats
+          firstLineCount,
+          secondLineCount,
+          adminAssignedCount,
+          unassignedCount,
+          firstLineSolved,
+          secondLineSolved,
+          adminSolved,
           total: activeTickets.length,
           closed: closedTickets.length
         }
@@ -406,7 +503,7 @@ const ticketController = {
   // Update ticket (admin only)
   updateTicket: async (req, res) => {
     try {
-      const { status, priority } = req.body;
+      const { status, priority, assignedTo } = req.body;
       const ticket = await Ticket.findById(req.params.id);
       
       if (!ticket) {
@@ -434,9 +531,22 @@ const ticketController = {
         });
       }
       
+      // Add history entry for assignment change if assignment has changed
+      if (ticket.assignedTo !== assignedTo) {
+        const fromText = ticket.assignedTo ? ticket.assignedTo : 'Ikke tildelt';
+        const toText = assignedTo ? assignedTo : 'Ikke tildelt';
+        
+        ticket.history.push({
+          action: `Tildeling endret fra ${fromText} til ${toText}`,
+          user: req.user._id,
+          timestamp: new Date()
+        });
+      }
+      
       // Update ticket fields
       ticket.status = status;
       ticket.priority = priority;
+      ticket.assignedTo = assignedTo;
       ticket.updatedAt = Date.now();
       
       await ticket.save();
