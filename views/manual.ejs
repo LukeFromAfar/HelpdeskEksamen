@@ -11,7 +11,8 @@
           <h2 class="h4 mb-3">Innholdsfortegnelse</h2>
           <ol>
             <li><a href="#standard-user">For standard brukere</a></li>
-            <li><a href="#support-staff">For support-personell (1./2. linje)</a></li>
+            <li><a href="#first-line">For 1. linje support</a></li>
+            <li><a href="#second-line">For 2. linje support</a></li>
             <li><a href="#admin-users">For administratorer</a></li>
           </ol>
         </div>
@@ -30,7 +31,15 @@
               <li>Logg inn på systemet med brukernavn og passord</li>
               <li>Klikk på "Opprett henvendelse" i navigasjonsmenyen</li>
               <li>Fyll ut skjemaet med en beskrivende tittel</li>
-              <li>Velg relevant kategori for henvendelsen</li>
+              <li>Velg relevant kategori for henvendelsen:
+                <ul>
+                  <li><strong>Hardware:</strong> For problemer med fysisk utstyr (PC, skjerm, tastatur, etc.)</li>
+                  <li><strong>Software:</strong> For problemer med programmer eller applikasjoner</li>
+                  <li><strong>Nettverk:</strong> For internett- eller nettverksproblemer</li>
+                  <li><strong>Konto:</strong> For tilgangs- eller passordrelaterte problemer</li>
+                  <li><strong>Annet:</strong> For spørsmål som ikke passer i andre kategorier</li>
+                </ul>
+              </li>
               <li>Skriv en detaljert beskrivelse av problemet</li>
               <li>Klikk på "Send inn henvendelse"</li>
             </ol>
@@ -49,57 +58,120 @@
               <li>Gå til "Mitt dashbord"</li>
               <li>Finn henvendelsen din i listen og klikk på den for å åpne</li>
               <li>Les kommentarer eller oppdateringer fra support-teamet</li>
-              <li>Legg til en kommentar hvis du har mer informasjon</li>
+              <li>Legg til en kommentar hvis du har mer informasjon ved å skrive i tekstfeltet nederst og klikke på "Send kommentar"</li>
               <li>Du vil motta varsler når det er aktivitet på henvendelsen din</li>
+              <li>Når henvendelsen er markert som "Løst", blir du bedt om å gi tilbakemelding på løsningen</li>
             </ol>
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle"></i> Best praksis: Hold all kommunikasjon innenfor henvendelsen for å sikre at alle involverte har tilgang til all informasjon.
+            </div>
           </div>
         </div>
       </section>
       
-      <!-- Support Staff Section -->
-      <section id="support-staff" class="mb-5">
-        <h2 class="border-bottom pb-2">For support-personell (1./2. linje)</h2>
+      <!-- 1st Line Support Staff Section -->
+      <section id="first-line" class="mb-5">
+        <h2 class="border-bottom pb-2">For 1. linje support</h2>
         
         <div class="card mb-4">
           <div class="card-header">
-            <h3 class="h5 mb-0">Tildele en henvendelse til en rolle</h3>
+            <h3 class="h5 mb-0">Håndtere nye henvendelser</h3>
           </div>
           <div class="card-body">
             <ol>
-              <li>Gå til "Admin dashbord"</li>
-              <li>Finn den relevante henvendelsen og klikk på "Rediger" knappen</li>
-              <li>I redigeringsvisningen, finn "Tildel til" dropdown-menyen</li>
-              <li>Velg riktig rolle basert på henvendelsens kompleksitet:
+              <li>Logg inn og gå til dashbordet for å se nye henvendelser</li>
+              <li>Prioriter henvendelser basert på disse kriteriene:
                 <ul>
-                  <li><strong>1. linje:</strong> For generelle henvendelser og standard problemer</li>
-                  <li><strong>2. linje:</strong> For mer tekniske eller komplekse problemer</li>
-                  <li><strong>Admin:</strong> For systemrelaterte problemer eller policy-spørsmål</li>
+                  <li><strong>Høy prioritet:</strong> Kritiske problemer som påvirker flere brukere</li>
+                  <li><strong>Medium prioritet:</strong> Viktige problemer som påvirker enkeltbrukeres arbeidsflyt</li>
+                  <li><strong>Lav prioritet:</strong> Mindre problemer som har workarounds</li>
                 </ul>
               </li>
-              <li>Oppdater også status til "Under arbeid" hvis du begynner å jobbe med den</li>
-              <li>Klikk på "Oppdater henvendelse" for å lagre endringene</li>
+              <li>Klikk på "Rediger" knappen for å ta eierskap for en henvendelse</li>
+              <li>Sett status til "Under arbeid" og tildel til "1. linje"</li>
+              <li>Legg til en første kommentar som anerkjenner henvendelsen</li>
             </ol>
-            <div class="alert alert-warning">
-              <i class="bi bi-exclamation-triangle"></i> Viktig: Tildeling av henvendelser hjelper med arbeidsflyt og statistikk. Sørg for å velge riktig rolle basert på henvendelsens natur.
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle"></i> Tips: En god første respons bør være: "Hei [navn], jeg jobber nå med henvendelsen din og kommer tilbake til deg så snart som mulig."
             </div>
           </div>
         </div>
         
         <div class="card mb-4">
           <div class="card-header">
-            <h3 class="h5 mb-0">Løse en henvendelse</h3>
+            <h3 class="h5 mb-0">Når du skal eskalere til 2. linje</h3>
           </div>
           <div class="card-body">
             <ol>
-              <li>Åpne henvendelsen fra Admin dashbordet</li>
-              <li>Les gjennom all informasjon og tidligere kommentarer</li>
-              <li>Legg til detaljerte kommentarer om løsningen</li>
-              <li>Når problemet er løst, klikk på "Rediger" knappen</li>
-              <li>Endre status til "Løst"</li>
-              <li>Klikk på "Oppdater henvendelse" for å lagre endringene</li>
+              <li>Eskalere henvendelser til 2. linje hvis:
+                <ul>
+                  <li>Problemet krever administratorrettigheter utover det 1. linje har</li>
+                  <li>Problemet er teknisk komplekst eller krever spesialkunnskap</li>
+                  <li>Du har forsøkt standard løsninger uten suksess</li>
+                </ul>
+              </li>
+              <li>For å eskalere:
+                <ol>
+                  <li>Klikk på "Rediger" knappen for henvendelsen</li>
+                  <li>Endre "Tildelt til" feltet til "2. linje"</li>
+                  <li>Legg til en kommentar som forklarer hva som er gjort så langt og hvorfor du eskalerer</li>
+                  <li>Klikk på "Oppdater henvendelse"</li>
+                </ol>
+              </li>
+            </ol>
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle"></i> Viktig: Ved eskalering, inkluder alltid detaljer om hva du har forsøkt og hvilke resultater det ga.
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- 2nd Line Support Staff Section -->
+      <section id="second-line" class="mb-5">
+        <h2 class="border-bottom pb-2">For 2. linje support</h2>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Håndtere eskalerte henvendelser</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Logg inn og gå til dashbordet</li>
+              <li>Filtrer etter henvendelser tildelt "2. linje"</li>
+              <li>Gjennomgå tidligere kommentarer og handlinger fra 1. linje</li>
+              <li>Legg til en kommentar som bekrefter at du har tatt over saken</li>
+              <li>Utfør avansert feilsøking og implementer løsninger</li>
+              <li>Dokumenter alle tekniske endringer grundig i kommentarfeltet</li>
+            </ol>
+            <div class="alert alert-info">
+              <i class="bi bi-lightbulb"></i> Tips: For å effektivisere prosessen, opprett interne dokumenter for vanlige problemer og referér til disse.
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Løse komplekse problemer</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>For systemendringer:
+                <ul>
+                  <li>Dokumenter nøyaktig hvilke endringer som gjøres</li>
+                  <li>Angi hvilke systemer som blir påvirket</li>
+                  <li>Test alltid endringer før de implementeres i produksjon</li>
+                </ul>
+              </li>
+              <li>Ved løsning av henvendelsen:
+                <ol>
+                  <li>Skriv en detaljert løsningsbeskrivelse i kommentarfeltet</li>
+                  <li>Sett status til "Løst"</li>
+                  <li>Veiled brukeren med eventuelle oppfølgingstrinn</li>
+                </ol>
+              </li>
             </ol>
             <div class="alert alert-success">
-              <i class="bi bi-check-circle"></i> Best praksis: Inkluder alltid en avsluttende kommentar som forklarer hva som ble gjort for å løse problemet.
+              <i class="bi bi-check-circle"></i> Best praksis: Løsningsbeskrivelser bør være så detaljerte at andre supportmedarbeidere kan gjenskape løsningen hvis lignende problemer oppstår.
             </div>
           </div>
         </div>
@@ -146,7 +218,7 @@
                 </ul>
               </li>
               <li>Bruk filtersystemet under grafene for å raffinere visningen av henvendelser</li>
-              <li>Eksporter data ved behov for mer detaljert analyse</li>
+              <li>Evaluer tilbakemeldinger fra brukere for å identifisere områder for forbedring</li>
             </ol>
             <div class="alert alert-info">
               <i class="bi bi-graph-up"></i> Tips: Regelmessig gjennomgang av statistikk kan hjelpe med å identifisere trender og forbedre support-tjenestene.

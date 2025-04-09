@@ -5,7 +5,12 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 ## Features
 
 - User authentication (login/register)
-- Role-based access control (user and admin roles)
+- Role-based access control (standard user, 1. linje, 2. linje, and admin roles)
+- User management system for administrators
+  - Create new users
+  - Update user roles
+  - Delete users
+  - View all users in the system
 - Ticket creation and management
   - Status tracking (Open, In Progress, Solved, Closed)
   - Priority levels (High, Medium, Low)
@@ -58,7 +63,11 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|--------|
-| *No current endpoints - reserved for future user management functionality* |
+| GET | `/api/users/manage` | View user management interface | Admin |
+| GET | `/api/users/all` | Get list of all users | Admin |
+| POST | `/api/users/update/:id` | Update user role | Admin |
+| GET | `/api/users/delete/:id` | Delete user | Admin |
+| POST | `/api/users/create` | Create new user | Admin |
 
 ## Security Features
 
@@ -93,7 +102,7 @@ This is a helpdesk ticketing system built with Node.js, Express, MongoDB, and So
 - name: String (required)
 - email: String (required, unique)
 - password: String (required, hashed with Argon2)
-- role: String (enum: 'user', 'admin', default: 'user')
+- role: String (enum: 'user', '1st_line', '2nd_line', 'admin', default: 'user')
 - createdAt: Date
 
 ### Ticket Model
