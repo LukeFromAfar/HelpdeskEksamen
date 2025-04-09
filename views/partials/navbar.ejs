@@ -3,21 +3,21 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="<%= typeof user !== 'undefined' ? '/api/tickets/mydashboard' : '/' %>">Indian Helpdesk</a>
+    <a class="navbar-brand" href="<%= typeof user !== 'undefined' && user ? '/api/tickets/mydashboard' : '/' %>">Indian Helpdesk</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <% if (typeof user !== 'undefined') { %>
-          <% if (user && (user.role === 'admin' || user.role === '1. linje' || user.role === '2. linje')) { %>
+        <% if (typeof user !== 'undefined' && user) { %>
+          <% if (user.role === 'admin' || user.role === '1. linje' || user.role === '2. linje') { %>
             <li class="nav-item">
               <a class="nav-link <%= currentPath === '/api/tickets/admin' ? 'active' : '' %>" href="/api/tickets/admin">
                 <i class="bi bi-speedometer2"></i> Admin dashbord
               </a>
             </li>
           <% } %>
-          <% if (user && user.role === 'admin') { %>
+          <% if (user.role === 'admin') { %>
             <li class="nav-item">
               <a class="nav-link <%= currentPath === '/api/users/admin' ? 'active' : '' %>" href="/api/users/admin">
                 <i class="bi bi-people"></i> Brukeradministrasjon
@@ -31,6 +31,12 @@
             <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Opprett ny henvendelse') ? 'active' : '' %>" href="/api/tickets/create">Opprett henvendelse</a>
           </li>
         <% } %>
+        <li class="nav-item">
+          <a class="nav-link <%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= currentPath === '/manual' ? 'active' : '' %>" href="/manual">Brukerveiledning</a>
+        </li>
       </ul>
       <div class="dark-mode-toggle">
         <label class="toggle-switch">
@@ -40,7 +46,7 @@
         <span class="toggle-text d-none d-sm-inline">Mørkt tema</span>
       </div>
       <ul class="navbar-nav">
-        <% if (typeof user !== 'undefined') { %>
+        <% if (typeof user !== 'undefined' && user) { %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <%= user.name %> <% if (user.role === 'admin') { %><span class="badge bg-primary">Admin</span><% } %>

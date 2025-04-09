@@ -15,6 +15,6 @@
   <link rel="stylesheet" href="/css/dark-mode.css">
 </head>
 <body>
-<% if (typeof user !== 'undefined') { %>
+<% if (typeof user !== 'undefined' && user) { %>
   <div id="current-user" data-user-id="<%= user._id %>" data-user-role="<%= user.role %>" style="display: none;"></div>
 <% } %>
