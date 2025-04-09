@@ -1,0 +1,161 @@
+<%- include('partials/header', {title: 'Brukerveiledning'}) %>
+<%- include('partials/navbar') %>
+
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <h1 class="mb-4">Brukerveiledning for Helpdesk System</h1>
+      
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="h4 mb-3">Innholdsfortegnelse</h2>
+          <ol>
+            <li><a href="#standard-user">For standard brukere</a></li>
+            <li><a href="#support-staff">For support-personell (1./2. linje)</a></li>
+            <li><a href="#admin-users">For administratorer</a></li>
+          </ol>
+        </div>
+      </div>
+      
+      <!-- Standard User Section -->
+      <section id="standard-user" class="mb-5">
+        <h2 class="border-bottom pb-2">For standard brukere</h2>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Opprette en ny henvendelse</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Logg inn på systemet med brukernavn og passord</li>
+              <li>Klikk på "Opprett henvendelse" i navigasjonsmenyen</li>
+              <li>Fyll ut skjemaet med en beskrivende tittel</li>
+              <li>Velg relevant kategori for henvendelsen</li>
+              <li>Skriv en detaljert beskrivelse av problemet</li>
+              <li>Klikk på "Send inn henvendelse"</li>
+            </ol>
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle"></i> Tips: En god beskrivelse bør inkludere nøyaktig hva som skjedde, når det skjedde, og eventuelle feilmeldinger du fikk.
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Følge opp en henvendelse</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Gå til "Mitt dashbord"</li>
+              <li>Finn henvendelsen din i listen og klikk på den for å åpne</li>
+              <li>Les kommentarer eller oppdateringer fra support-teamet</li>
+              <li>Legg til en kommentar hvis du har mer informasjon</li>
+              <li>Du vil motta varsler når det er aktivitet på henvendelsen din</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Support Staff Section -->
+      <section id="support-staff" class="mb-5">
+        <h2 class="border-bottom pb-2">For support-personell (1./2. linje)</h2>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Tildele en henvendelse til en rolle</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Gå til "Admin dashbord"</li>
+              <li>Finn den relevante henvendelsen og klikk på "Rediger" knappen</li>
+              <li>I redigeringsvisningen, finn "Tildel til" dropdown-menyen</li>
+              <li>Velg riktig rolle basert på henvendelsens kompleksitet:
+                <ul>
+                  <li><strong>1. linje:</strong> For generelle henvendelser og standard problemer</li>
+                  <li><strong>2. linje:</strong> For mer tekniske eller komplekse problemer</li>
+                  <li><strong>Admin:</strong> For systemrelaterte problemer eller policy-spørsmål</li>
+                </ul>
+              </li>
+              <li>Oppdater også status til "Under arbeid" hvis du begynner å jobbe med den</li>
+              <li>Klikk på "Oppdater henvendelse" for å lagre endringene</li>
+            </ol>
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle"></i> Viktig: Tildeling av henvendelser hjelper med arbeidsflyt og statistikk. Sørg for å velge riktig rolle basert på henvendelsens natur.
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Løse en henvendelse</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Åpne henvendelsen fra Admin dashbordet</li>
+              <li>Les gjennom all informasjon og tidligere kommentarer</li>
+              <li>Legg til detaljerte kommentarer om løsningen</li>
+              <li>Når problemet er løst, klikk på "Rediger" knappen</li>
+              <li>Endre status til "Løst"</li>
+              <li>Klikk på "Oppdater henvendelse" for å lagre endringene</li>
+            </ol>
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle"></i> Best praksis: Inkluder alltid en avsluttende kommentar som forklarer hva som ble gjort for å løse problemet.
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Admin Section -->
+      <section id="admin-users" class="mb-5">
+        <h2 class="border-bottom pb-2">For administratorer</h2>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Administrere brukere</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Gå til "Brukeradministrasjon" fra navigasjonsmenyen</li>
+              <li>Her kan du se en oversikt over alle registrerte brukere</li>
+              <li>For å endre en brukerrolle, klikk på "Rediger" ved den aktuelle brukeren</li>
+              <li>Endre rollen i dropdown-menyen:
+                <ul>
+                  <li><strong>Standard bruker:</strong> For vanlige brukere som kun kan opprette henvendelser</li>
+                  <li><strong>1. linje:</strong> For første nivå av support-personell</li>
+                  <li><strong>2. linje:</strong> For tekniske spesialister</li>
+                  <li><strong>Admin:</strong> For systemadministratorer med fulle rettigheter</li>
+                </ul>
+              </li>
+              <li>Klikk "Lagre endringer" for å oppdatere brukerens rolle</li>
+            </ol>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Analysere statistikk og rapporter</h3>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>Gå til "Admin dashbord"</li>
+              <li>Øverst på siden finner du grafiske oversikter over:
+                <ul>
+                  <li>Henvendelser fordelt etter status (Åpen, Under arbeid, Løst)</li>
+                  <li>Henvendelser fordelt etter prioritet (Høy, Medium, Lav)</li>
+                  <li>Rolletildelinger og løsningsrate per rolle</li>
+                </ul>
+              </li>
+              <li>Bruk filtersystemet under grafene for å raffinere visningen av henvendelser</li>
+              <li>Eksporter data ved behov for mer detaljert analyse</li>
+            </ol>
+            <div class="alert alert-info">
+              <i class="bi bi-graph-up"></i> Tips: Regelmessig gjennomgang av statistikk kan hjelpe med å identifisere trender og forbedre support-tjenestene.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

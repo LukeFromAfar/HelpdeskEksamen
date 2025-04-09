@@ -405,7 +405,7 @@ body.dark-mode .btn-close {
 body.dark-mode .alert-info {
   background-color: #193c47;
   border-color: #0f5672;
-  color: #9cdce7;
+  color: #ffffff;
 }
 
 body.dark-mode .alert-danger {
@@ -417,7 +417,52 @@ body.dark-mode .alert-danger {
 body.dark-mode .alert-success {
   background-color: #1e3b1e;
   border-color: #2c572c;
+  color: #ffffff;
+}
+
+/* Improved alerts in dark mode for better readability and contrast */
+body.dark-mode .alert-warning {
+  background-color: #553b00;
+  border-color: #856404;
+  color: #ffffff;
+}
+
+body.dark-mode .alert-warning .bi {
+  color: #ffdd00;
+}
+
+body.dark-mode .alert-warning strong {
+  color: #ffdd00;
+}
+
+body.dark-mode .alert-info {
+  background-color: #193c47;
+  border-color: #0f5672;
+  color: #ffffff;
+}
+
+body.dark-mode .alert-info .bi {
+  color: #9cdce7;
+}
+
+body.dark-mode .alert-success {
+  background-color: #1e3b1e;
+  border-color: #2c572c;
+  color: #ffffff;
+}
+
+body.dark-mode .alert-success .bi {
   color: #a7d8a7;
+}
+
+/* Ensure all alert text is properly visible */
+body.dark-mode .alert {
+  color: #ffffff;
+}
+
+body.dark-mode .alert i,
+body.dark-mode .alert .bi {
+  margin-right: 5px;
 }
 
 /* Comments */
@@ -604,4 +649,90 @@ body.dark-mode .pagination .page-link:hover:not(.disabled) {
 
 body.dark-mode .pagination .page-link:focus {
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* FAQ and Manual Pages */
+body.dark-mode .accordion-item {
+  background-color: #1e1e1e;
+  border-color: #444;
+}
+
+body.dark-mode .accordion-button {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-mode .accordion-button:not(.collapsed) {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+
+body.dark-mode .accordion-button:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+body.dark-mode .accordion-button::after {
+  filter: invert(1);
+}
+
+body.dark-mode .accordion-body {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+/* Manual page specific styling */
+body.dark-mode .border-bottom {
+  border-bottom-color: #444 !important;
+}
+
+body.dark-mode ol li,
+body.dark-mode ul li {
+  color: #e0e0e0;
+}
+
+body.dark-mode section h2 {
+  color: #ffffff;
+}
+
+body.dark-mode .alert-info,
+body.dark-mode .alert-warning,
+body.dark-mode .alert-success {
+  color: #e0e0e0;
+}
+
+body.dark-mode a[href^="#"] {
+  color: #6ea8fe;
+  text-decoration: none;
+}
+
+body.dark-mode a[href^="#"]:hover {
+  color: #9ec5fe;
+  text-decoration: underline;
+}
+
+body.dark-mode .h4,
+body.dark-mode .h5 {
+  color: #ffffff;
+}
+
+/* Ensure all Bootstrap icons are visible in dark mode */
+body.dark-mode .bi {
+  color: inherit;
+}
+
+/* Make FAQ accordion section headers more visible */
+body.dark-mode #faqAccordion .accordion-header {
+  color: #ffffff;
+}
+
+/* Content tables in manual page */
+body.dark-mode .card .h4 {
+  color: #ffffff;
+}
+
+/* Fix for the section anchors padding with fixed navbar */
+body.dark-mode section {
+  scroll-margin-top: 80px;
 }

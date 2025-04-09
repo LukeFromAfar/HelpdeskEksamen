@@ -258,6 +258,7 @@ body {
 .pagination .page-item.active .page-link {
   background-color: #0d6efd;
   border-color: #0d6efd;
+  color: #ffffff; /* Ensuring text is white for visibility */
 }
 
 .pagination .page-item.disabled .page-link {
@@ -271,6 +272,14 @@ body {
 .pagination .page-link:hover {
   background-color: #e9ecef;
   border-color: #dee2e6;
+}
+
+/* New styles for pagination container */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 /* Responsive Adjustments */
@@ -352,6 +361,28 @@ body {
   .row.g-2 > [class*="col-"] {
     margin-bottom: 8px;
   }
+  
+  /* Pagination adjustments for mobile */
+  .pagination-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .pagination {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  .pagination .page-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .pagination-info {
+    text-align: center;
+    font-size: 0.875rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -383,5 +414,11 @@ body {
   /* Even more compact filtering on very small screens */
   .filter-section .card-body {
     padding: 0.5rem;
+  }
+  
+  /* Even smaller pagination on very small screens */
+  .pagination .page-link {
+    padding: 0.35rem 0.6rem; /* Increased padding for bigger touch targets */
+    font-size: 0.9rem; /* Slightly larger font size */
   }
 }

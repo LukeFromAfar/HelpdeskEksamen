@@ -13,6 +13,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const userRoutes = require('./routes/userRoutes');
+const pageRoutes = require('./routes/pageRoutes');
 
 // Initialize app
 const app = express();
@@ -58,6 +59,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/users', userRoutes);
+app.use('/', pageRoutes); // This is already correctly placed to handle public pages
 
 // Main route with auth check
 app.get('/', (req, res) => {
