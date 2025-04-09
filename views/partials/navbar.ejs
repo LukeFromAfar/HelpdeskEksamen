@@ -11,6 +11,9 @@
             <li class="nav-item">
               <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Admin dashbord') ? 'active' : '' %>" href="/api/tickets/admin">Admin dashbord</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Brukeradministrasjon') ? 'active' : '' %>" href="/api/users/admin">Brukeradministrasjon</a>
+            </li>
           <% } %>
           <li class="nav-item">
             <a class="nav-link <%= (typeof title !== 'undefined' && title === 'Mitt dashbord') ? 'active' : '' %>" href="/api/tickets/mydashboard">Mitt dashbord</a>

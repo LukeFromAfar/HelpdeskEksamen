@@ -34,8 +34,8 @@ const authController = {
         });
       }
       
-      // Check password
-      const validPassword = await argon2.verify(user.password, password);
+      // Check password - use the comparePassword method from the model
+      const validPassword = await user.comparePassword(password);
       if (!validPassword) {
         return res.status(400).render('auth/login', {
           title: 'Logg inn',
@@ -115,14 +115,11 @@ const authController = {
         });
       }
       
-      // Hash password
-      const hashedPassword = await argon2.hash(password);
-      
-      // Create new user
+      // Create new user - let the pre-save hook handle password hashing
       const user = new User({
         name,
         email,
-        password: hashedPassword
+        password,  // Raw password - will be hashed by mongoose middleware
         // Default role is 'user' as defined in the schema
       });
       

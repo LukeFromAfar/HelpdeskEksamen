@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "node ./utils/seed.js"
+    "seed": "node seed.js"
   },
   "dependencies": {
     "argon2": "^0.31.2",

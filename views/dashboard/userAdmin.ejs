@@ -1,0 +1,188 @@
+<%- include('../partials/header', {title: 'Brukeradministrasjon'}) %>
+<%- include('../partials/navbar') %>
+
+<div class="container-fluid mt-4">
+  <h1 class="mb-4">Brukeradministrasjon</h1>
+  
+  <% if (typeof query !== 'undefined' && query.deleted === 'true') { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      Brukeren er slettet. Alle brukerens henvendelser ble bevart og er nå knyttet til en anonym bruker.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+  
+  <% if (typeof query !== 'undefined' && query.success === 'true') { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      Brukerinformasjonen er oppdatert.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+  
+  <!-- Hidden data div for charts -->
+  <div id="chartStatsData" class="d-none"><%= JSON.stringify(stats) %></div>
+  
+  <!-- Stats cards -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h5 class="card-title">Totalt antall brukere</h5>
+          <p class="card-text display-4"><%= stats.total %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-danger text-white">
+        <div class="card-body">
+          <h5 class="card-title">Administratorer</h5>
+          <p class="card-text display-4"><%= stats.adminCount %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h5 class="card-title">Support-roller</h5>
+          <p class="card-text display-4"><%= stats.firstLineCount + stats.secondLineCount %></p>
+          <div class="mt-2">
+            <small>1. linje: <%= stats.firstLineCount %></small><br>
+            <small>2. linje: <%= stats.secondLineCount %></small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5 class="card-title">Standard brukere</h5>
+          <p class="card-text display-4"><%= stats.userCount %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- User filter -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Filtrer brukere</h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="input-group">
+            <input type="text" id="userSearch" class="form-control" placeholder="Søk på navn, e-post eller ID..." value="<%= typeof search !== 'undefined' ? search : '' %>">
+            <button class="btn btn-primary" type="button" id="searchBtn">
+              <i class="bi bi-search"></i> Søk
+            </button>
+            <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+              <i class="bi bi-x"></i> Tøm
+            </button>
+          </div>
+          
+          <small class="form-text text-muted">Søk på navn, e-post eller ID</small>
+        </div>
+        <div class="col-md-4">
+          <select class="form-select" id="roleFilter">
+            <option value="" <%= !roleFilter ? 'selected' : '' %>>Alle roller</option>
+            <option value="admin" <%= roleFilter === 'admin' ? 'selected' : '' %>>Admin</option>
+            <option value="1. linje" <%= roleFilter === '1. linje' ? 'selected' : '' %>>1. linje</option>
+            <option value="2. linje" <%= roleFilter === '2. linje' ? 'selected' : '' %>>2. linje</option>
+            <option value="user" <%= roleFilter === 'user' ? 'selected' : '' %>>Standard bruker</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select class="form-select" id="sortSelector">
+            <option value="createdAt:desc" <%= sortField === 'createdAt' && sortOrder === 'desc' ? 'selected' : '' %>>Nyeste først</option>
+            <option value="createdAt:asc" <%= sortField === 'createdAt' && sortOrder === 'asc' ? 'selected' : '' %>>Eldste først</option>
+            <option value="name:asc" <%= sortField === 'name' && sortOrder === 'asc' ? 'selected' : '' %>>Navn A-Å</option>
+            <option value="name:desc" <%= sortField === 'name' && sortOrder === 'desc' ? 'selected' : '' %>>Navn Å-A</option>
+            <option value="email:asc" <%= sortField === 'email' && sortOrder === 'asc' ? 'selected' : '' %>>E-post A-Å</option>
+            <option value="email:desc" <%= sortField === 'email' && sortOrder === 'desc' ? 'selected' : '' %>>E-post Å-A</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- User table -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Alle brukere</h5>
+      <span id="userCount" class="badge bg-secondary"><%= users.length %> av <%= totalUsers %></span>
+    </div>
+    <div class="card-body">
+      <% if (users.length === 0) { %>
+        <div class="alert alert-info" role="alert">
+          Det er ingen brukere som matcher filteret.
+        </div>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Navn</th>
+                <th>E-post</th>
+                <th>Rolle</th>
+                <th>Registrert</th>
+                <th>Handlinger</th>
+              </tr>
+            </thead>
+            <tbody id="adminUserList">
+              <% users.forEach(userItem => { %>
+                <tr class="user-row" data-id="<%= userItem._id %>">
+                  <td><%= userItem._id %></td>
+                  <td><%= userItem.name %></td>
+                  <td><%= userItem.email %></td>
+                  <td>
+                    <span class="badge bg-<%= 
+                      userItem.role === 'admin' ? 'danger' : 
+                      userItem.role === '1. linje' ? 'primary' : 
+                      userItem.role === '2. linje' ? 'info' : 'success' 
+                    %>"><%= userItem.role %></span>
+                  </td>
+                  <td><%= new Date(userItem.createdAt).toLocaleString('no-NO') %></td>
+                  <td>
+                    <a href="/api/users/edit/<%= userItem._id %>" class="btn btn-sm btn-warning">Rediger</a>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <div>
+            Viser <%= users.length %> av <%= totalUsers %> brukere
+          </div>
+          <nav aria-label="Sidenavigasjon">
+            <ul class="pagination mb-0">
+              <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/users/admin?page=1&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= roleFilter ? '&role=' + roleFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Første</a>
+              </li>
+              <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/users/admin?page=<%= currentPage - 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= roleFilter ? '&role=' + roleFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Forrige</a>
+              </li>
+              
+              <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                  <a class="page-link" href="/api/users/admin?page=<%= i %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= roleFilter ? '&role=' + roleFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>"><%= i %></a>
+                </li>
+              <% } %>
+              
+              <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/users/admin?page=<%= currentPage + 1 %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= roleFilter ? '&role=' + roleFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Neste</a>
+              </li>
+              <li class="page-item <%= currentPage === totalPages || totalPages === 0 ? 'disabled' : '' %>">
+                <a class="page-link" href="/api/users/admin?page=<%= totalPages %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %><%= roleFilter ? '&role=' + roleFilter : '' %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>">Siste</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
